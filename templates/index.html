@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block title%}Home{%endblock%}
+
+{%block content%}
+<h1 class="display-1 text-center text-success">Welcome, {{user.email}}!</h1>
+<form action="/logout" method="post">
+    <button class="btn btn-danger btn-lg btn block"><a href ="https://mail.google.com/mail/u/0/?logout&hl=en"></a> Log Out</button>
+</form>
+{%endblock%}
