@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title%}Register{%endblock%}
+{%block style%}class='center-body'{%endblock%}
+{% block content %}
+
+<div class="container text-center">
+    <img src="/static/logo.png" alt="" width="550px">
+    
+    <form method="POST" id="user_form" class="text-center">
+      {{ form.hidden_tag() }}
+      <h2 class="join-message">Please create a password</h2>
+      <p>
+          Hello, and thank you for joining Swolemate! While you are free to continue to use Google for authentication, we ask that you also create a password to be paired with your email address: {{user.email}}. This way, you can log in with an email/password combination as well, and we can better organize all of your swole-goals! 
+      </p>
+      {% for field in form if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {{ field(placeholder=field.label.text, class="form-control my-3") }}
+      {% endfor %}
+
+      <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
+    </form>
+  </div>
+      
+{% endblock %}

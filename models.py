@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -53,4 +54,39 @@ class User(db.Model):
             is_authorized = bcrypt.check_password_hash(user.password, password)
             if is_authorized:
                 return user
+            else:
+                return 'invalid password'
         return False
+
+    @classmethod
+    def change_password(cls, user_id, password):
+        user = cls.query.get(user_id)
+
+        new_password = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user.password = new_password
+        db.session.add(user)
+
+
+class Post(db.Model):
+    """an individual workout post"""
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    details = db.Column(db.String(140), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False,
+                          default=datetime.utcnow())
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id', ondelete='CASCADE'), nullable=False)
+
+    user = db.relationship('User')
+
+
+class Likes(db.Model):
+    """mapping workout posts to user likes"""
+    __tablename__ = 'likes'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id', ondelete='CASCADE'))
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id', ondelete='CASCADE'), unique=True)

@@ -2,8 +2,13 @@
 {%block title%}Home{%endblock%}
 
 {%block content%}
+{% if user.username %}
+<h1 class="display-1 text-center text-success">Welcome, {{user.username}}!</h1>
+{% else %}
 <h1 class="display-1 text-center text-success">Welcome, {{user.email}}!</h1>
-<form action="/logout" method="post">
-    <button class="btn btn-danger btn-lg btn block"><a href ="https://mail.google.com/mail/u/0/?logout&hl=en"></a> Log Out</button>
+{%endif%}
+<form action="/logout" method="post" class="text-center">
+    <a href="/user/{{user.id}}/edit" class="btn btn-primary btn-lg">Edit Profile</a>
+    <button class="btn btn-danger btn-lg m-3"> Log Out</button>
 </form>
 {%endblock%}

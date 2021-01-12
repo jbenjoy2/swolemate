@@ -11,6 +11,7 @@ cryptography==3.3.1
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
 Flask-SQLAlchemy==2.4.4
+Flask-WTF==0.14.3
 google-api-core==1.24.1
 google-api-python-client==1.12.8
 google-auth==1.24.0
@@ -42,3 +43,4 @@ uritemplate==3.0.1
 urllib3==1.26.2
 Werkzeug==1.0.1
 wrapt==1.12.1
+WTForms==2.2.1

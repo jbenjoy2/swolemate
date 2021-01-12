@@ -2,22 +2,72 @@
 
 {% block title%}Log In{% endblock %}
 
+{%block style%}class='center-body'{%endblock%}
 {% block content%}
+<div class="container">
 
-    <form class="form-signin text-center">
-      <img class="mb-4" src="static/logo2.png" alt="" width="100" height="100">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
-      <a href="/login"class="btn btn-lg btn-secondary btn-block" id="google-signin">
-          <span id="g-logo"></span>
-          <span id="g-text">Sign In With Google</span>
-      </a>
+    
+  <form method="POST" id="user_form" class="text-center">
+    {{ login_form.csrf_token(id='new_csrf')}}
+    <img class="mb-4" src="static/logo2.png" alt="" width="150" height="150">
+    <h2 class="join-message">Login</h2>
+    {% for field in login_form if field.widget.input_type != 'hidden' %}
+      {{ field(placeholder=field.label.text, class="form-control my-3") }}
+      {% for error in field.errors %}
+        <span class="text-danger mb-2">{{ error }}</span>
+      {% endfor %}
+    {% endfor %}
 
-      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-    </form>
+    <button class="btn btn-primary btn-lg px-5 my-2">Get Swole</button>
+  </form>
+  <div class="row justify-content-center">
+    <a href="/login"class="btn btn-lg btn-secondary my-2 justify-self-center" id="google-signin">
+      <span id="g-logo"></span>
+      <span id="g-text">Sign In With Google</span>
+  </a>
+  <a type="button" class="btn btn-link btn-lg btn-block my-2" data-toggle="modal" data-target="#registerModal">
+    Need an account? Register Here!
+  </a>
+  </div>
+    
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h5 class="modal-title text-center" id="confirmModalLabel">Join Swolemate today!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <form method="POST" action='/register'id="new_user_form" class="text-center">
+              {{ register_form.hidden_tag() }}
+              <img class="mb-4" src="static/logo.png" alt="">
+              {% for field in register_form if field.widget.input_type != 'hidden' %}
+                {% for error in field.errors %}
+                  <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+                {{ field(placeholder=field.label.text, class="form-control my-3") }}
+              {% endfor %}
+        
+              <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
+            </form>
+          </div>
+              
+            
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 
+
+  
+
+</div>
+
+
+
+</div>
+    
 {% endblock %}
