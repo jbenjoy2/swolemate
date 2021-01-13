@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}UH OH!{% endblock %}
+{%block style%}class='center-body'{% endblock %}
+{%block content%}
+<div class="row align-middle justify-content-center">
+    <div class="jumbotron text-center" style='background:none'>
+        <h1 class="text-warning oops">WHOOPSIES!</h1>
+        <img class="img-fluid" src="https://i.giphy.com/media/t4PGh70cnR8By/source.gif">
+        <p class="pt-5">It looks like that page forgot a spotter. So very sorry! Click below to go back home</p>
+    <a href="/"><i class="fas fa-dumbbell fa-5x"></i></a>
+    </div>
+    
+</div>
+{%endblock%}

@@ -4,7 +4,8 @@ from wtforms.validators import InputRequired, Email, Length, EqualTo
 
 
 class UserAddForm(FlaskForm):
-    new_email = StringField('E-Mail', validators=[InputRequired(), Email()])
+    new_email = StringField(
+        'E-Mail', validators=[InputRequired(), Email()], render_kw={"autofocus": True})
     new_password = PasswordField('Password', validators=[
         InputRequired(), Length(min=8), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password', validators=[
@@ -13,7 +14,8 @@ class UserAddForm(FlaskForm):
 
 
 class UserEditForm(FlaskForm):
-    email = StringField('E-Mail', validators=[InputRequired(), Email()])
+    email = StringField(
+        'E-Mail', validators=[InputRequired(), Email()], render_kw={"autofocus": True})
     username = StringField('(Optional) Username/Display Name',
                            validators=[Length(max=25)])
     image_url = StringField('(Optional) Image URL')
@@ -23,7 +25,7 @@ class UserEditForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('E-Mail', validators=[InputRequired(), Email()])
     password = PasswordField('Password', validators=[
-                             InputRequired(), Length(min=8)])
+        InputRequired(), Length(min=8)])
 
 
 class ForcedPasswordResetForm(FlaskForm):

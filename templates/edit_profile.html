@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title%}Edit Profile{% endblock %}
+
+{%block style%}class='center-body'{%endblock%}
+{% block content%}
+<div class="container">
+    <form method='post'>
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field(class_="form-control") }}
+            {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+        {% endfor %}
+        <div class="form-group row justify-content-around">
+            <a href="/" class="btn btn-lg btn-danger col-5 form-control">Cancel</a>
+            <button class="btn btn-lg btn-success col-5 form-control" type='submit'>Submit</button>
+        </div>
+    </form>
+    </div>
+    
+    
+    
+{% endblock %}

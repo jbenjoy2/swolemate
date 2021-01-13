@@ -48,6 +48,13 @@ def do_logout():
     if CURRENT_USER_KEY in session:
         del session[CURRENT_USER_KEY]
 
+
+# custom 404
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
 # google oauth routes
 
 
@@ -89,6 +96,25 @@ def authorize():
         return redirect('/')
 
 
+@app.route('/user/<int:user_id>/force-password-reset', methods=['GET', 'POST'])
+def force_reset_password(user_id):
+    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+        do_logout()
+        return redirect('/sign-in')
+
+    user = User.query.get_or_404(user_id)
+    form = ForcedPasswordResetForm()
+
+    if form.validate_on_submit():
+        User.change_password(user_id=user_id, password=form.password.data)
+        db.session.commit()
+        flash('Password successfully changed!', 'success')
+        return redirect('/')
+    return render_template('/forced_reset.html', form=form, user=user)
+
+
+# main user routes outside of google oauth
+
 @app.route('/sign-in', methods=['GET', 'POST'])
 def show_login_page():
     """route to sign in user through database directly, not through google oauth"""
@@ -126,40 +152,7 @@ def show_login_page():
             login_form.email.errors = [
                 'Invalid Credentials. Please check email/password and try again']
 
-    return render_template('signin.html', login_form=login_form, register_form=register_form)
-
-
-@app.route('/')
-def show_home_page():
-    """route to show main welcome page...may delete or alter later"""
-    if CURRENT_USER_KEY in session:
-        user = User.query.get(session[CURRENT_USER_KEY])
-        return render_template('index.html', user=user)
-    # redirect to sign in page if no user is logged in
-    return redirect('/sign-in')
-
-
-@app.route('/logout', methods=['POST'])
-def logout():
-    do_logout()
-    return redirect('/')
-
-
-@app.route('/user/<int:user_id>/force-password-reset', methods=['GET', 'POST'])
-def force_reset_password(user_id):
-    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
-        do_logout()
-        return redirect('/sign-in')
-
-    user = User.query.get_or_404(user_id)
-    form = ForcedPasswordResetForm()
-
-    if form.validate_on_submit():
-        User.change_password(user_id=user_id, password=form.password.data)
-        db.session.commit()
-        flash('Password successfully changed!', 'success')
-        return redirect('/')
-    return render_template('/forced_reset.html', form=form, user=user)
+    return render_template('signin.html', login_form=login_form, register_form=register_form, img_cls='hidden')
 
 
 @app.route('/register', methods=['POST'])
@@ -172,16 +165,56 @@ def register_new_user():
     if register_form.validate_on_submit():
         try:
             user = User.signup(
-                email=register_form.email.data,
-                password=register_form.password.data,
+                email=register_form.new_email.data,
+                password=register_form.new_password.data,
                 image_url=register_form.image_url.data or User.image_url.default.arg
             )
             db.session.commit()
         except IntegrityError:
             flash("Email already registered! Please log in or try again", 'danger')
-            return render_tamplate('signin.html', register_form=register_form, login_form=login_form)
+            return render_template('signin.html', register_form=register_form, login_form=login_form)
 
         do_login(user)
         return redirect('/')
     else:
         return render_template('signin.html', register_form=register_form)
+
+
+@app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+def edit_user_profile(user_id):
+    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+        do_logout()
+        return redirect('/sign-in')
+
+    user = User.query.get_or_404(user_id)
+
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.username = form.username.data
+        user.image_url = form.image_url.data or User.image_url.default.arg
+        user.bio = form.bio.data
+
+        db.session.commit()
+
+        flash('Profile Successfully Updated!', 'success')
+        return redirect('/')
+    return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
+
+
+@app.route('/')
+def show_home_page():
+    """route to show main welcome page...may delete or alter later"""
+    if CURRENT_USER_KEY in session:
+        user = User.query.get(session[CURRENT_USER_KEY])
+        return render_template('index.html', user=user, img_src=user.image_url)
+    # redirect to sign in page if no user is logged in
+    return redirect('/sign-in')
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    """route to log user out of app"""
+    do_logout()
+    return redirect('/')

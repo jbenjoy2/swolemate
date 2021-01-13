@@ -3,7 +3,7 @@ body {
 	height: 100%;
 }
 
-body.center-body {
+.center-body {
 	display: flex;
 	align-items: center;
 	padding-bottom: 40px;
@@ -41,4 +41,18 @@ span#g-text {
 	font-weight: bold;
 	/* Use the Roboto font that is loaded in the <head> */
 	font-family: 'Roboto', sans-serif;
+}
+
+li.hidden {
+	display: none;
+}
+
+@media only screen and (max-width: 992px) {
+	#prof-pic {
+		display: none;
+	}
+}
+
+.text-primary {
+	color: royalblue !important;
 }

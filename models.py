@@ -56,6 +56,7 @@ class User(db.Model):
                 return user
             else:
                 return 'invalid password'
+
         return False
 
     @classmethod

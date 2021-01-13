@@ -1,14 +1,16 @@
 {%extends 'base.html'%}
 {%block title%}Home{%endblock%}
-
+{%block style%}class='center-body'{%endblock%}
 {%block content%}
 {% if user.username %}
-<h1 class="display-1 text-center text-success">Welcome, {{user.username}}!</h1>
+<h1 class="display-2 text-center text-success">Welcome, {{user.username}}!</h1>
 {% else %}
-<h1 class="display-1 text-center text-success">Welcome, {{user.email}}!</h1>
+<h1 class="display-2 text-center text-success">Welcome, {{user.email}}!</h1>
 {%endif%}
-<form action="/logout" method="post" class="text-center">
-    <a href="/user/{{user.id}}/edit" class="btn btn-primary btn-lg">Edit Profile</a>
-    <button class="btn btn-danger btn-lg m-3"> Log Out</button>
-</form>
+{% if  user.posts %}
+<h2 class="display-3 text-info">Workouts</h2>
+{% else %}
+<h4 class="display-5 text-primary text-center">{{user.username}} has not posted any workouts yet!</h4>
+
+{% endif %}
 {%endblock%}
