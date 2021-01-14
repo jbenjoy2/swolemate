@@ -3,10 +3,11 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from authlib.integrations.flask_client import OAuth
 from models import db, connect_db, User
 from forms import UserAddForm, UserEditForm, LoginForm, ForcedPasswordResetForm
+from google_auth import set_up_google, id, secret
 from sqlalchemy.exc import IntegrityError
 
-CLIENT_ID = '68392004616-tj0jco6efikrqfn9p52b604oc8hn9vql.apps.googleusercontent.com'
-CLIENT_SECRET = 'X1M_cmpQDgit6r0rBVFCZt1G'
+CLIENT_ID = id
+CLIENT_SECRET = secret
 CURRENT_USER_KEY = 'current_user'
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'itsasecretshhhh')
@@ -18,22 +19,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 
 # set up google oauth first
-oauth = OAuth(app)
-google = oauth.register(
-    name='google',
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
-    # This is only needed if using openId to fetch user info
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    client_kwargs={'scope': 'openid email profile'},
-
-
-)
+set_up_google(app)
 
 # main login/logout functionality
 
