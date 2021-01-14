@@ -5,8 +5,7 @@ from models import db, connect_db, User
 from forms import UserAddForm, UserEditForm, LoginForm, ForcedPasswordResetForm
 from sqlalchemy.exc import IntegrityError
 
-CLIENT_ID = '68392004616-tj0jco6efikrqfn9p52b604oc8hn9vql.apps.googleusercontent.com'
-CLIENT_SECRET = 'X1M_cmpQDgit6r0rBVFCZt1G'
+
 CURRENT_USER_KEY = 'current_user'
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'itsasecretshhhh')
