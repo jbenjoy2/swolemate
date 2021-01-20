@@ -16,8 +16,10 @@ class UserAddForm(FlaskForm):
 class UserEditForm(FlaskForm):
     email = StringField(
         'E-Mail', validators=[InputRequired(), Email()], render_kw={"autofocus": True})
-    username = StringField('(Optional) Username/Display Name',
+    username = StringField('Username',
                            validators=[Length(max=25)])
+    first_name = StringField('First Name')
+    last_name = StringField('Last Name')
     image_url = StringField('(Optional) Image URL')
     bio = TextAreaField('(Optional) Tell us about yourself!')
 
@@ -33,3 +35,8 @@ class ForcedPasswordResetForm(FlaskForm):
         InputRequired(), Length(min=8), EqualTo('confirm', message='Passwords must match')], id='forced')
     confirm = PasswordField('Confirm Password', validators=[
         InputRequired(), Length(min=8)], id='confirm_forced')
+
+
+class PostForm(FlaskForm):
+    details = TextAreaField('Workout Details*', validators=[InputRequired()])
+    is_private = BooleanField('Make this post private')

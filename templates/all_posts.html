@@ -1,0 +1,40 @@
+
+    <div class="col-sm-6">
+        <ul class="list-group" id="posts">
+    
+          {% for post in user.posts %}
+    
+            <li class="list-group-item">
+                <a href="/posts/{{ post.id }}" class="post-link">
+                <a href="/user/{{ post.user.id }}">
+                    <img src="{{ post.user.image_url }}" alt="user image" class="timeline-image" width="100px">
+                </a>
+        
+                  <div class="post-area">
+                    {%if post.user.first_name and post.user.last_name and post.user.username %}
+                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
+                    {% elif post.user.username%}
+                    <a href="/user/{{ post.user.id }}">@{{ user.username }}</a>
+                    {% else %} 
+                    <a href="/user/{{ post.user.id }}">{{post.user.email}}</a>
+                    {% endif %}
+                    {% if post.is_private %}
+                    <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
+                    {% else %}
+                    <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
+                    {%endif%}
+                    <p>{{ post.details }}</p>
+                    
+                  </div>
+                </li>
+        
+              {% endfor %}
+            </a>
+    
+              
+    
+        </ul>
+      </div>
+
+
+<script src="/static/all_posts.js"></script>

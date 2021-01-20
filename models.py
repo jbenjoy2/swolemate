@@ -21,6 +21,8 @@ class User(db.Model):
     email = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     username = db.Column(db.Text, unique=True)
+    first_name = db.Column(db.Text)
+    last_name = db.Column(db.Text)
     image_url = db.Column(db.Text, default='/static/default-pic.png')
     bio = db.Column(db.Text)
     # set up relationships
@@ -79,6 +81,7 @@ class Post(db.Model):
                           default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.id', ondelete='CASCADE'), nullable=False)
+    is_private = db.Column(db.Boolean, nullable=False, default=False)
 
     user = db.relationship('User')
 

@@ -1,10 +1,11 @@
 import os
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from authlib.integrations.flask_client import OAuth
-from models import db, connect_db, User
-from forms import UserAddForm, UserEditForm, LoginForm, ForcedPasswordResetForm
-from google_auth import set_up_google, id, secret
+from models import db, connect_db, User, Post
+from forms import UserAddForm, UserEditForm, LoginForm, ForcedPasswordResetForm, PostForm
+from google_auth import id, secret
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Unauthorized
 
 CLIENT_ID = id
 CLIENT_SECRET = secret
@@ -19,7 +20,22 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 
 # set up google oauth first
-set_up_google(app)
+oauth = OAuth(app)
+
+google = oauth.register(
+    name='google',
+    client_id=id,
+    client_secret=secret,
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    # This is only needed if using openId to fetch user info
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
 
 # main login/logout functionality
 
@@ -35,11 +51,16 @@ def do_logout():
         del session[CURRENT_USER_KEY]
 
 
-# custom 404
+# custom 404 and 401
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
+
+
+@app.errorhandler(401)
+def show_401(e):
+    return render_template('401.html'), 401
 
 # google oauth routes
 
@@ -101,15 +122,66 @@ def force_reset_password(user_id):
 
 # main user routes outside of google oauth
 
-@app.route('/sign-in', methods=['GET', 'POST'])
-def show_login_page():
-    """route to sign in user through database directly, not through google oauth"""
 
-    # don't let logged in users see this screen
+@app.route('/register', methods=['POST'])
+def register_new_user():
     if CURRENT_USER_KEY in session:
         return redirect('/')
+    register_form = UserAddForm()
+    login_form = LoginForm()
 
-    # create login form instance
+    if register_form.validate_on_submit():
+        try:
+            user = User.signup(
+                email=register_form.new_email.data,
+                password=register_form.new_password.data,
+                image_url=register_form.image_url.data or User.image_url.default.arg
+            )
+            db.session.commit()
+        except IntegrityError:
+            flash("Email already registered! Please log in or try again", 'danger')
+            return render_template('home_anon.html', register_form=register_form, login_form=login_form)
+
+        do_login(user)
+        return redirect('/')
+    else:
+        return render_template('home_anon.html', register_form=register_form)
+
+
+@app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+def edit_user_profile(user_id):
+    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+        do_logout()
+        return redirect('/')
+
+    user = User.query.get_or_404(user_id)
+
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        try:
+            user.email = form.email.data
+            user.username = form.username.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.image_url = form.image_url.data or User.image_url.default.arg
+            user.bio = form.bio.data
+
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash(
+                "Email or Username already taken!! Please try again", 'danger')
+            return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
+
+        flash('Profile Successfully Updated!', 'success')
+        return redirect(url_for('show_user_profile', user_id=user.id))
+    return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def show_home_page():
+    """route to show main welcome page...may delete or alter later"""
     login_form = LoginForm()
     # create register form instance to go in modal
     register_form = UserAddForm()
@@ -132,75 +204,55 @@ def show_login_page():
         # handle invalid password entry
         elif user == 'invalid password':
             login_form.password.errors = ["Incorrect Password."]
-            return render_template('signin.html', form=form)
+            return render_template('home_anon.html', login_form=login_form, register_form=register_form)
         # handle user being not found
         else:
             login_form.email.errors = [
                 'Invalid Credentials. Please check email/password and try again']
 
-    return render_template('signin.html', login_form=login_form, register_form=register_form, img_cls='hidden')
-
-
-@app.route('/register', methods=['POST'])
-def register_new_user():
+        return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
     if CURRENT_USER_KEY in session:
-        return redirect('/')
-    register_form = UserAddForm()
-    login_form = LoginForm()
-
-    if register_form.validate_on_submit():
-        try:
-            user = User.signup(
-                email=register_form.new_email.data,
-                password=register_form.new_password.data,
-                image_url=register_form.image_url.data or User.image_url.default.arg
-            )
-            db.session.commit()
-        except IntegrityError:
-            flash("Email already registered! Please log in or try again", 'danger')
-            return render_template('signin.html', register_form=register_form, login_form=login_form)
-
-        do_login(user)
-        return redirect('/')
-    else:
-        return render_template('signin.html', register_form=register_form)
+        user = User.query.get(session[CURRENT_USER_KEY])
+        return render_template('home.html', user=user, img_src=user.image_url)
+    # redirect to sign in page if no user is logged in
+    return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
 
 
-@app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
-def edit_user_profile(user_id):
+@app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
+def logout(user_id):
+    """route to log user out of app"""
+    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+        raise Unauthorized()
+    do_logout()
+    return redirect('/')
+
+
+@app.route('/user/<int:user_id>')
+def show_user_profile(user_id):
+    if CURRENT_USER_KEY not in session:
+        raise Unauthorized
+    user = User.query.get_or_404(user_id)
+
+    return render_template('user_profile.html', user=user)
+
+# route for posting workouts
+
+
+@app.route('/user/<int:user_id>/posts/new', methods=['GET', 'POST'])
+def create_post(user_id):
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
         return redirect('/sign-in')
 
     user = User.query.get_or_404(user_id)
 
-    form = UserEditForm(obj=user)
+    form = PostForm()
 
     if form.validate_on_submit():
-        user.email = form.email.data
-        user.username = form.username.data
-        user.image_url = form.image_url.data or User.image_url.default.arg
-        user.bio = form.bio.data
-
+        post = Post(details=form.details.data,
+                    is_private=form.is_private.data, user_id=user_id)
+        db.session.add(post)
         db.session.commit()
-
-        flash('Profile Successfully Updated!', 'success')
-        return redirect('/')
-    return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
-
-
-@app.route('/')
-def show_home_page():
-    """route to show main welcome page...may delete or alter later"""
-    if CURRENT_USER_KEY in session:
-        user = User.query.get(session[CURRENT_USER_KEY])
-        return render_template('index.html', user=user, img_src=user.image_url)
-    # redirect to sign in page if no user is logged in
-    return redirect('/sign-in')
-
-
-@app.route('/logout', methods=['POST'])
-def logout():
-    """route to log user out of app"""
-    do_logout()
-    return redirect('/')
+        flash('New post created!', 'success')
+        return redirect(url_for('show_user_profile', user_id=user_id))
+    return render_template('add_post.html', form=form, user=user)

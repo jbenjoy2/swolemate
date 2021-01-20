@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top mb-2">
+    <a class="navbar-brand" href="/">
+        <img src="/static/logo.png" alt=""  height="24" class="d-inline-block align-middle">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+          </div>
+        </li> 
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link to-hide" href="/user/{{user.id}}/posts/new">New Post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link to-hide" href="/user/{{user.id}}/edit">Edit Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link to-hide" href="/user/{{user.id}}/logout">Log Out</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto" id='prof-pic'>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="/user/{{user.id}}/posts/new">New Post</a>
+        </li>
+        
+        <li class="nav-item dropdown {{img_cls}} align-self-center">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              {% if user.first_name and user.last_name%}
+              {{user.first_name}} {{user.last_name}}
+              {% elif user.username%}
+              {{user.username}}
+              {% else %}
+              {{user.email}}
+              {% endif%}
+            </a>
+            
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="/user/{{user.id}}/edit">Edit Profile</a>
+              <a class="dropdown-item" href="/user/{{user.id}}/logout">Log Out</a>
+            </div>
+        </li>
+        <li class="nav-item">
+          <img src="{{user.image_url}}" width="50" alt="" class="rounded-circle">
+        </li>
+      </ul>
+      
+    </div>
+  </nav>
