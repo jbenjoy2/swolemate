@@ -52,8 +52,11 @@ async function addPosts() {
 	let posts = await get_posts(pageCounter);
 	console.log(posts);
 	let markUp;
+	let userInfo;
 	for (let post of posts) {
-		let userInfo = await getUserInfo(post.user_id);
+		userInfo = await getUserInfo(post.user_id);
+	}
+	for (let post of posts) {
 		let user = userInfo.user;
 		console.log(user);
 		if (post.is_private) {
@@ -62,9 +65,9 @@ async function addPosts() {
 		$('#all-posts').append(markUp);
 	}
 }
-addPosts();
 
 $(function() {
+	addPosts();
 	$('#loadMore').on('click', function() {
 		addPosts();
 	});

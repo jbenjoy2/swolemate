@@ -116,3 +116,4 @@ class Likes(db.Model):
         'users.id', ondelete='CASCADE'))
     post_id = db.Column(db.Integer, db.ForeignKey(
         'posts.id', ondelete='CASCADE'), unique=True)
+
