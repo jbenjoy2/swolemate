@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{%block title%}Home{%endblock%}
+
+{%block style%}center-body{%endblock%}
+{%block content%}
+{% include 'auth_nav.html' %}
+<div class="container">
+    <div class="bg"></div>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <ul class="list-group no-hover" id="posts">
+        <li class="list-group-item">
+          <a href="{{ url_for('show_user_profile', user_id=post.user.id) }}">
+            <img src="{{ post.user.image_url }}" alt="" class="timeline-image">
+          </a>
+          <div class="post-area">
+            <div class="post-heading">
+                {% if post.user.username%}
+              <a href="/user/{{ post.user.id }}">@{{ post.user.username }}</a>
+              {% else%}
+              <a href="/user/{{ post.user.id }}">{{ post.user.email }}</a>
+              {%endif%}
+              {% if 'current_user' in session %}
+                {% if session['current_user'] == post.user.id %}
+                  <form method="POST"
+                        action="/posts/{{ post.id }}/delete">
+                    <button class="btn btn-outline-danger">Delete</button>
+                  </form>
+                {% endif %}
+              {% endif %}
+            </div>
+            <p class="single-post">{{ post.details }}</p>
+            <span class="text-muted">{{ post.timestamp.strftime('%d %B, %Y') }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+  
+
+{% endblock %}

@@ -1,8 +1,8 @@
 import os
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
 from authlib.integrations.flask_client import OAuth
 from models import db, connect_db, User, Post
-from forms import UserAddForm, UserEditForm, LoginForm, ForcedPasswordResetForm, PostForm
+from forms import UserAddForm, UserEditForm, LoginForm, ForcedResetForm, PostForm
 from google_auth import id, secret
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
@@ -83,7 +83,10 @@ def authorize():
     # userinfo contains stuff u specificed in the scrope
     resp = google.get('userinfo')
     user_info = resp.json()
+    print(user_info)
     email = user_info['email']
+    first_name = user_info['given_name'].capitalize()
+    last_name = user_info['family_name'].capitalize()
     user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
     # Here you use the profile/user data that you got and query your database find/register the user
     # and set ur own data in the session not the profile from google
@@ -93,37 +96,59 @@ def authorize():
     print(user)
 
     if not user:
-        user = User.signup(email=email, password='password1',
-                           image_url=User.image_url.default.arg)
+        user = User.signup(email=email, password='password1', username='temporary',
+                           first_name=first_name, last_name=last_name, image_url=User.image_url.default.arg)
         db.session.commit()
         do_login(user)
-        return redirect(f'/user/{user.id}/force-password-reset')
+        return redirect(f'/user/{user.id}/force-reset')
     else:
         do_login(user)
         return redirect('/')
 
 
-@app.route('/user/<int:user_id>/force-password-reset', methods=['GET', 'POST'])
+@app.route('/user/<int:user_id>/force-reset', methods=['GET', 'POST'])
 def force_reset_password(user_id):
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
         return redirect('/sign-in')
 
     user = User.query.get_or_404(user_id)
-    form = ForcedPasswordResetForm()
+    form = ForcedResetForm()
 
     if form.validate_on_submit():
-        User.change_password(user_id=user_id, password=form.password.data)
+        User.change_info(
+            user_id=user_id, username=form.username.data, password=form.password.data)
         db.session.commit()
-        flash('Password successfully changed!', 'success')
+        flash('User information successfully changed!', 'success')
         return redirect('/')
     return render_template('/forced_reset.html', form=form, user=user)
 
 
 # main user routes outside of google oauth
 
+# api routes
+@app.route('/api/users/<int:user_id>')
+def get_user_info(user_id):
+    user = User.query.get(user_id)
 
-@app.route('/register', methods=['POST'])
+    return jsonify(user=user.serialize())
+
+
+@app.route('/api/posts')
+def show_posts():
+    page = int(request.args.get('page', 1))
+    if CURRENT_USER_KEY in session:
+        posts = Post.query.order_by(Post.id.desc()).paginate(
+            page=page, per_page=10, error_out=True)
+    else:
+        posts = Post.query.filter_by(is_private='f').order_by(Post.id.desc()).paginate(
+            page=page, per_page=10, error_out=True)
+
+    all_posts = [post.serialize() for post in posts.items]
+    return jsonify(has_next=posts.has_next, posts=all_posts)
+
+
+@ app.route('/register', methods=['POST'])
 def register_new_user():
     if CURRENT_USER_KEY in session:
         return redirect('/')
@@ -135,20 +160,24 @@ def register_new_user():
             user = User.signup(
                 email=register_form.new_email.data,
                 password=register_form.new_password.data,
+                username=register_form.new_username.data,
+                first_name=register_form.first_name.data,
+                last_name=register_form.last_name.data,
                 image_url=register_form.image_url.data or User.image_url.default.arg
             )
             db.session.commit()
+
+            do_login(user)
+            return redirect('/')
         except IntegrityError:
             flash("Email already registered! Please log in or try again", 'danger')
             return render_template('home_anon.html', register_form=register_form, login_form=login_form)
 
-        do_login(user)
-        return redirect('/')
     else:
-        return render_template('home_anon.html', register_form=register_form)
+        return render_template('home_anon.html', register_form=register_form, login_form=login_form)
 
 
-@app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+@ app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_user_profile(user_id):
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
@@ -179,7 +208,7 @@ def edit_user_profile(user_id):
     return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@ app.route('/', methods=['GET', 'POST'])
 def show_home_page():
     """route to show main welcome page...may delete or alter later"""
     login_form = LoginForm()
@@ -196,11 +225,8 @@ def show_home_page():
         # handle use case for a user being returned with valid password entered
         if user and user != 'invalid password':
             do_login(user)
-            if user.username:
-                flash(f'Hello, {user.username}!', 'warning')
-            else:
-                flash(f'Hello, {user.email}!', 'warning')
-            return redirect('/')
+            flash(f'Hello, {user.username}!', 'warning')
+            return render_template('home.html', user=user)
         # handle invalid password entry
         elif user == 'invalid password':
             login_form.password.errors = ["Incorrect Password."]
@@ -209,16 +235,15 @@ def show_home_page():
         else:
             login_form.email.errors = [
                 'Invalid Credentials. Please check email/password and try again']
-
-        return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
+            return render_template('home_anon.html', login_form=login_form, register_form=register_form)
     if CURRENT_USER_KEY in session:
         user = User.query.get(session[CURRENT_USER_KEY])
-        return render_template('home.html', user=user, img_src=user.image_url)
+        return render_template('home.html', user=user)
     # redirect to sign in page if no user is logged in
     return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
 
 
-@app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
+@ app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
 def logout(user_id):
     """route to log user out of app"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
@@ -227,7 +252,7 @@ def logout(user_id):
     return redirect('/')
 
 
-@app.route('/user/<int:user_id>')
+@ app.route('/user/<int:user_id>')
 def show_user_profile(user_id):
     if CURRENT_USER_KEY not in session:
         raise Unauthorized
@@ -238,7 +263,7 @@ def show_user_profile(user_id):
 # route for posting workouts
 
 
-@app.route('/user/<int:user_id>/posts/new', methods=['GET', 'POST'])
+@ app.route('/user/<int:user_id>/posts/new', methods=['GET', 'POST'])
 def create_post(user_id):
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
@@ -256,3 +281,10 @@ def create_post(user_id):
         flash('New post created!', 'success')
         return redirect(url_for('show_user_profile', user_id=user_id))
     return render_template('add_post.html', form=form, user=user)
+
+
+@ app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    user = User.query.get_or_404(post.user_id)
+    return render_template('show_post.html', post=post, user=user)

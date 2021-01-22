@@ -15,27 +15,15 @@
                 <div class="col-9">
                     <ul class="user-stats nav nav-pills">
                     <li class="stat">
-                        <p class="small">Messages</p>
+                        <p class="small">Posts</p>
                         <h4>
-                        <a href="/users/{{ user.id }}">{{ user.messages | length }}</a>
-                        </h4>
-                    </li>
-                    <li class="stat">
-                        <p class="small">Following</p>
-                        <h4>
-                        <a href="/users/{{ user.id }}/following">{{ user.following | length }}</a>
-                        </h4>
-                    </li>
-                    <li class="stat">
-                        <p class="small">Followers</p>
-                        <h4>
-                        <a href="/users/{{ user.id }}/followers">{{ user.followers | length }}</a>
+                        <a href="/user/{{ user.id }}">{{ user.messages | length }}</a>
                         </h4>
                     </li>
                     <li class="stat">
                         <p class="small">Likes</p>
                         <h4>
-                        <a href="/users/{{user.id}}/likes">{{user.likes | length}}</a>
+                        <a href="/user/{{user.id}}/likes">{{user.likes | length}}</a>
                         </h4>
                     </li>
                     
@@ -47,11 +35,7 @@
     
     <div class="row">
         <div class="col-sm-3">
-            {% if user.username%}
           <h4 id="sidebar-username">@{{ user.username }}</h4>
-          {% elif user.email %}
-          <h4 id="sidebar-username">{{ user.email }}</h4>
-          {% endif %}
           {% if user.bio %}
           <p>About: {{user.bio}}</p>
           {%endif%}
@@ -65,7 +49,5 @@
 <div class="container mt-3">
     {% include 'flash.html'%}
 </div>
-
-
 
 {%endblock%}

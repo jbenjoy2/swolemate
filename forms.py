@@ -10,6 +10,10 @@ class UserAddForm(FlaskForm):
         InputRequired(), Length(min=8), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password', validators=[
         InputRequired(), Length(min=8)])
+    new_username = StringField('Username', validators=[
+                               InputRequired(), Length(max=30)])
+    first_name = StringField('First Name', validators=[InputRequired()])
+    last_name = StringField('Last Name', validators=[InputRequired()])
     image_url = StringField('(Optional) Image URL')
 
 
@@ -18,8 +22,8 @@ class UserEditForm(FlaskForm):
         'E-Mail', validators=[InputRequired(), Email()], render_kw={"autofocus": True})
     username = StringField('Username',
                            validators=[Length(max=25)])
-    first_name = StringField('First Name')
-    last_name = StringField('Last Name')
+    first_name = StringField('First Name', validators=[InputRequired()])
+    last_name = StringField('Last Name', validators=[InputRequired()])
     image_url = StringField('(Optional) Image URL')
     bio = TextAreaField('(Optional) Tell us about yourself!')
 
@@ -30,7 +34,9 @@ class LoginForm(FlaskForm):
         InputRequired(), Length(min=8)])
 
 
-class ForcedPasswordResetForm(FlaskForm):
+class ForcedResetForm(FlaskForm):
+    username = StringField(
+        'Create Username*', validators=[InputRequired(), Length(max=25)])
     password = PasswordField('Create Password*', validators=[
         InputRequired(), Length(min=8), EqualTo('confirm', message='Passwords must match')], id='forced')
     confirm = PasswordField('Confirm Password', validators=[

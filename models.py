@@ -20,9 +20,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
-    username = db.Column(db.Text, unique=True)
-    first_name = db.Column(db.Text)
-    last_name = db.Column(db.Text)
+    username = db.Column(db.Text, unique=True, nullable=False)
+    first_name = db.Column(db.Text, nullable=False)
+    last_name = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text, default='/static/default-pic.png')
     bio = db.Column(db.Text)
     # set up relationships
@@ -35,12 +35,15 @@ class User(db.Model):
 
     # signup/authenticate methods
     @classmethod
-    def signup(cls, email, password, image_url):
+    def signup(cls, email, password, username, first_name, last_name, image_url):
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         new_user = User(
             email=email,
             password=hashed_pwd,
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
             image_url=image_url
         )
 
@@ -62,13 +65,23 @@ class User(db.Model):
         return False
 
     @classmethod
-    def change_password(cls, user_id, password):
+    def change_info(cls, user_id, username, password):
         user = cls.query.get(user_id)
 
         new_password = bcrypt.generate_password_hash(password).decode('UTF-8')
-
+        user.username = username
         user.password = new_password
         db.session.add(user)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'username': self.username,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'image_url': self.image_url
+        }
 
 
 class Post(db.Model):
@@ -84,6 +97,15 @@ class Post(db.Model):
     is_private = db.Column(db.Boolean, nullable=False, default=False)
 
     user = db.relationship('User')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'details': self.details,
+            'timestamp': self.timestamp.strftime('%b %d, %Y'),
+            'user_id': self.user_id,
+            'is_private': self.is_private
+        }
 
 
 class Likes(db.Model):

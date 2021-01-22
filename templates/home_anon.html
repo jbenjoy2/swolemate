@@ -58,7 +58,7 @@
               {% for field in login_form if field.widget.input_type != 'hidden' %}
                 {{ field(placeholder=field.label.text, class="form-control my-3") }}
                 {% for error in field.errors %}
-                  <p class="text-danger mb-2">{{ error }}</p>
+                  <p class="text-danger mb-2" id='login-errors'>{{ error }}</p>
                 {% endfor %}
               {% endfor %}
           

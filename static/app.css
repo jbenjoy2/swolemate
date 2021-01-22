@@ -241,3 +241,33 @@ nav + .container {
 	right: 4px;
 	z-index: 3;
 }
+
+#posts.no-hover .post-heading {
+	display: flex;
+	justify-content: space-between;
+	height: 47px;
+	margin-top: 3px;
+}
+
+#posts.no-hover .post-heading .btn {
+	min-width: 105px;
+}
+
+.single-post {
+	font-size: 27px;
+	line-height: 32px;
+	letter-spacing: 0.01em;
+	margin-bottom: 10px;
+}
+
+.navbar {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+	margin-bottom: 1rem;
+	position: relative;
+	z-index: 9999;
+}
+
+img#nav-prof-pic {
+	width: 32px;
+	border-radius: 32px;
+}

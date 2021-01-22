@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{%block title%}Home{%endblock%}
+
+{%block style%}center-body{%endblock%}
+{%block content%}
+{% include 'auth_nav.html' %}
+<h1 class="text-info text-center">Recent Posts</h1>
+<div class="container mb-3">
+    
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <ul class="list-group" id="all-posts">
+            </ul>
+        </div>
+        
+    </div>
+    <div class="row justify-content-center my-5">
+        <button class="btn btn-lg btn-info" id='loadMore'>Load More</button>
+    </div>
+   
+
+   
+</div>
+<div class="container my-3">
+    {% include 'flash.html'%}
+</div>
+<hr>
+<div class="container-fluid my-3 p-2">
+    {% include 'footer.html'%}
+</div>
+
+{%endblock%}
+{%block scripts%}
+<script src="/static/all_posts.js"></script>
+{% endblock %}
