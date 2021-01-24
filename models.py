@@ -115,5 +115,43 @@ class Likes(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.id', ondelete='CASCADE'))
     post_id = db.Column(db.Integer, db.ForeignKey(
-        'posts.id', ondelete='CASCADE'), unique=True)
+        'posts.id', ondelete='CASCADE'))
 
+
+class Muscle(db.Model):
+    __tablename__ = 'muscles'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, unique=True, nullable=False)
+    body_part = db.Column(db.Text, nullable=False)
+
+    posts = db.relationship(
+        'Post', secondary='posts_muscles', backref='muscles')
+
+
+class Equipment(db.Model):
+    __tablename__ = 'equipment'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, unique=True, nullable=False)
+
+    posts = db.relationship(
+        'Post', secondary='posts_equipment', backref='equipment')
+
+
+class PostMuscle(db.Model):
+    __tablename__ = 'posts_muscles'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id', ondelete='CASCADE'), nullable=False)
+    muscle_id = db.Column(db.Integer, db.ForeignKey(
+        'muscles.id', ondelete='CASCADE'), nullable=False)
+
+
+class PostEquipment(db.Model):
+    __tablename__ = 'posts_equipment'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id', ondelete='CASCADE'), nullable=False)
+    equipment_id = db.Column(db.Integer, db.ForeignKey(
+        'equipment.id', ondelete='CASCADE'), nullable=False)

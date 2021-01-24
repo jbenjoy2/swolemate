@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
 
 {%block title%}Home{%endblock%}
-
-{%block style%}center-body{%endblock%}
 {%block content%}
 {% include 'auth_nav.html' %}
-<div class="container">
-    <div class="bg"></div>
+<div class="container pb-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <ul class="list-group no-hover" id="posts">
@@ -16,11 +13,7 @@
           </a>
           <div class="post-area">
             <div class="post-heading">
-                {% if post.user.username%}
               <a href="/user/{{ post.user.id }}">@{{ post.user.username }}</a>
-              {% else%}
-              <a href="/user/{{ post.user.id }}">{{ post.user.email }}</a>
-              {%endif%}
               {% if 'current_user' in session %}
                 {% if session['current_user'] == post.user.id %}
                   <form method="POST"
@@ -37,7 +30,15 @@
       </ul>
     </div>
   </div>
+  
 </div>
+{% if session['current_user'] == post.user.id %}
+<div class="container pt-5 mt-5">
+  <div class="row justify-content-center">
+    <a href="/posts/{{post.id}}/edit" class="btn btn-secondary text-danger col-md-3">Edit This Post</a>
+  </div>
+</div>
+{%endif%}
   
 
 {% endblock %}

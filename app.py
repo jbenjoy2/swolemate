@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'itsasecretshhhh')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgres:///swolemate')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 
 connect_db(app)
 
@@ -47,8 +47,7 @@ def do_login(user):
 
 def do_logout():
     """helper method to log out user"""
-    if CURRENT_USER_KEY in session:
-        del session[CURRENT_USER_KEY]
+    del session[CURRENT_USER_KEY]
 
 
 # custom 404 and 401
@@ -161,8 +160,8 @@ def register_new_user():
                 email=register_form.new_email.data,
                 password=register_form.new_password.data,
                 username=register_form.new_username.data,
-                first_name=register_form.first_name.data,
-                last_name=register_form.last_name.data,
+                first_name=register_form.first_name.data.capitalize(),
+                last_name=register_form.last_name.data.capitalize(),
                 image_url=register_form.image_url.data or User.image_url.default.arg
             )
             db.session.commit()
@@ -191,8 +190,8 @@ def edit_user_profile(user_id):
         try:
             user.email = form.email.data
             user.username = form.username.data
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
+            user.first_name = form.first_name.data.capitalize()
+            user.last_name = form.last_name.data.capitalize()
             user.image_url = form.image_url.data or User.image_url.default.arg
             user.bio = form.bio.data
 
@@ -211,6 +210,7 @@ def edit_user_profile(user_id):
 @ app.route('/', methods=['GET', 'POST'])
 def show_home_page():
     """route to show main welcome page...may delete or alter later"""
+
     login_form = LoginForm()
     # create register form instance to go in modal
     register_form = UserAddForm()
@@ -225,7 +225,7 @@ def show_home_page():
         # handle use case for a user being returned with valid password entered
         if user and user != 'invalid password':
             do_login(user)
-            flash(f'Hello, {user.username}!', 'warning')
+            flash(f'Hello, {user.username}!', 'secondary')
             return render_template('home.html', user=user)
         # handle invalid password entry
         elif user == 'invalid password':
@@ -238,8 +238,11 @@ def show_home_page():
             return render_template('home_anon.html', login_form=login_form, register_form=register_form)
     if CURRENT_USER_KEY in session:
         user = User.query.get(session[CURRENT_USER_KEY])
-        return render_template('home.html', user=user)
+        if user:
+            return render_template('home.html', user=user)
+
     # redirect to sign in page if no user is logged in
+
     return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
 
 

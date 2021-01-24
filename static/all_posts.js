@@ -55,10 +55,7 @@ async function addPosts() {
 	let userInfo;
 	for (let post of posts) {
 		userInfo = await getUserInfo(post.user_id);
-	}
-	for (let post of posts) {
 		let user = userInfo.user;
-		console.log(user);
 		if (post.is_private) {
 			markUp = generatePrivateMarkup(post, user);
 		} else markUp = generatePublicMarkup(post, user);

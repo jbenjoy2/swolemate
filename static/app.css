@@ -3,6 +3,18 @@ body {
 	height: 100%;
 }
 
+h1 {
+	font-family: 'Black Ops One', cursive;
+}
+
+li.stat > h4 > a {
+	color: #d9534f;
+}
+
+.post-area > .post-heading > a {
+	color: #d9534f;
+}
+
 .center-body {
 	display: flex;
 	align-items: center;
@@ -226,9 +238,12 @@ nav + .container {
 	position: relative;
 	z-index: 2;
 }
+.post-area > a {
+	color: #d9534f;
+}
 
 .post-area > a:hover {
-	color: orange;
+	color: #dd7571;
 }
 
 .stat > h4 > a:hover {
@@ -270,4 +285,11 @@ nav + .container {
 img#nav-prof-pic {
 	width: 32px;
 	border-radius: 32px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
