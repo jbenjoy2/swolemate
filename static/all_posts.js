@@ -22,7 +22,14 @@ function generatePublicMarkup(post) {
 	<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
 	<span class="text-muted">${post.timestamp}</span>
 	<p>${post.details}</p>
-	
+	<p>
+		Muscles:
+			<small>- ${post.muscles.join('- -')} -</small>
+	</p>
+	<p class="mt-2">Equipment:
+		
+	<small>- ${post.equipment.join('- -')} -</small>
+	</p>
 	</div>
 </li>`;
 }
@@ -38,9 +45,24 @@ function generatePrivateMarkup(post) {
 	<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
 	<span class="text-muted">${post.timestamp}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
 	<p>${post.details}</p>
-	
+	<p>
+		Muscles:
+			<small>- ${post.muscles.join('- -')} -</small>
+	</p>
+	<p class="mt-2">Equipment:
+		
+	<small>- ${post.equipment.join('- -')} -</small>
+	</p>
 	</div>
 </li>`;
+}
+
+function generateMuscles(post) {
+	let markup = `Muscles:`;
+	for (let muscle of post.muscles) {
+		markup += `<small>- ${muscle} -</small>`;
+	}
+	return markup;
 }
 
 async function addPosts() {
@@ -51,7 +73,8 @@ async function addPosts() {
 		if (post.is_private) {
 			markUp = generatePrivateMarkup(post);
 		} else markUp = generatePublicMarkup(post);
-		$('#all-posts').append(markUp);
+
+		$('#posts').append(markUp);
 	}
 }
 

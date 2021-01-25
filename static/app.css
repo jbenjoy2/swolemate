@@ -11,6 +11,14 @@ li.stat > h4 > a {
 	color: #d9534f;
 }
 
+#posts .list-group-item {
+	border-radius: 10px;
+}
+
+#anon-posts .list-group-item {
+	border-radius: 15px;
+}
+
 .post-area > .post-heading > a {
 	color: #d9534f;
 }
@@ -131,9 +139,6 @@ li.anon:hover {
 #posts:not(.no-hover) .list-group-item:hover {
 	background-color: #535556;
 }
-#all-posts:not(.no-hover) .list-group-item:hover {
-	background-color: #535556;
-}
 
 #posts.no-hover .post-area {
 	width: 100%;
@@ -246,6 +251,11 @@ nav + .container {
 }
 
 #posts .list-group-item a:not(.post-link) {
+	position: relative;
+	z-index: 2;
+}
+
+#posts .list-group-item img {
 	position: relative;
 	z-index: 2;
 }

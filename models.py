@@ -26,7 +26,7 @@ class User(db.Model):
     image_url = db.Column(db.Text, default='/static/default-pic.png')
     bio = db.Column(db.Text)
     # set up relationships
-    posts = db.relationship('Post')
+    posts = db.relationship('Post', order_by='Post.id.desc()')
 
     likes = db.relationship('Post', secondary="likes")
 

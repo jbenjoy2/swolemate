@@ -18,18 +18,32 @@
         </div>
         <div class="row justify-content-center d-flex flex-wrap">
             <div class="form-group col-md-3">
+                
                 {{form.muscles.label}}
-                    
+                <div class="muscle-errors">
+                    {% for error in form.muscles.errors %}
+                    <span class="text-danger">{{error}}</span>
+                    {% endfor %}
+                </div>
                 {% for choice in form.muscles %}
                 <div class="form-check">
                     {{ choice(class="form-check-input") }}
                     {{ choice.label(class="form-check-label") }}
                 </div>
-            {% endfor %}
+                
+                {%endfor %}
+                
                 
             </div>
+            
             <div class="form-group col-md-3">
+                
                 {{form.equipment.label}}
+                <div class="equipment-errors">
+                    {% for error in form.equipment.errors %}
+                    <span class="text-danger">{{error}}</span>
+                    {% endfor %}
+                </div>
                 {% for choice in form.equipment %}
                     <div class="form-check">
                         {{ choice(class="form-check-input") }}

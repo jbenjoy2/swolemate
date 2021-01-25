@@ -17,7 +17,18 @@
                     {% else %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
                     {%endif%}
-                    <p>{{ post.details }}</p>
+                    <p style="white-space: pre-line">{{ post.details }}</p>
+                    <p>
+              Muscles:
+              {%for muscle in post.muscles%}
+            <small>- {{muscle.name}} -</small>
+            {% endfor %}
+            </p>
+            <p class="mt-2">Equipment:
+              {%for equipment in post.equipment%}
+            <small>- {{equipment.name}} -</small>
+            {% endfor %}
+            </p>
                     
                   </div>
               </li>

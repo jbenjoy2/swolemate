@@ -50,6 +50,8 @@ class ForcedResetForm(FlaskForm):
 
 class PostForm(FlaskForm):
     details = TextAreaField('Workout Details*', validators=[InputRequired()])
-    muscles = MultiCheckboxField('Muscles Worked', coerce=int)
-    equipment = MultiCheckboxField('Equipment used', coerce=int)
+    muscles = MultiCheckboxField(
+        'Muscles Worked', coerce=int, validators=[InputRequired()])
+    equipment = MultiCheckboxField(
+        'Equipment used', coerce=int, validators=[InputRequired()])
     is_private = BooleanField('Make this post private')

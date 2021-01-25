@@ -16,34 +16,33 @@ async function getUserInfo(id) {
 	return response.data;
 }
 
-function generateMarkup(post, user) {
-	return `<li class="list-group-item my-2">
-<a href="/posts/${post.id}" class="post-link">
-<a href="/user/${post.user_id}">
-	<img src="${user.image_url}" alt="user image" class="timeline-image" width="100px">
-</a>
+function generateMarkup(post) {
+	return `<li class="list-group-item my-2 no-hover">
+        
 
-	<div class="post-area">
-	<a href="/user/${post.user_id}">${user.first_name} ${user.last_name} - @${user.username}</a>
-	<span class="text-muted">${post.timestamp}</span>
-	<p>${post.details}</p>
-	
-	</div>
-</li>`;
+    
+        <div class="post-area">
+        <span class='text-danger'>${post.first} ${post.last} - @${post.username}</span>
+        <span class="text-muted">${post.timestamp}</span>
+        <p>${post.details}</p>
+        <p>
+            Muscles:
+                <small>- ${post.muscles.join('- -')} -</small>
+        </p>
+        <p class="mt-2">Equipment:
+            
+        <small>- ${post.equipment.join('- -')} -</small>
+        </p>
+        </div>
+    </li>`;
 }
 
 async function addPosts() {
 	let posts = await get_posts(pageCounter);
 	console.log(posts);
 	let markUp;
-	let userInfo;
 	for (let post of posts) {
-		userInfo = await getUserInfo(post.user_id);
-	}
-	for (let post of posts) {
-		let user = userInfo.user;
-		console.log(user);
-		markUp = generateMarkup(post, user);
+		markUp = generateMarkup(post);
 		$('#anon-posts').append(markUp);
 	}
 }
