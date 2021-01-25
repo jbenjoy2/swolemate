@@ -289,8 +289,12 @@ nav + .container {
 	margin-top: 3px;
 }
 
-#posts.no-hover .post-heading .btn {
+#posts.no-hover .post-heading .btn:not(#like) {
 	min-width: 105px;
+}
+
+#like {
+	border-radius: 50%;
 }
 
 .single-post {

@@ -20,6 +20,16 @@
                         action="/posts/{{ post.id }}/edit">
                     <button class="btn btn-outline-danger">Edit</button>
                   </form>
+                  {%else%}
+                  <form method="POST" action="/posts/{{post.id}}/like" class="messages-like">
+                    <button class="
+                      btn 
+                      btn-sm 
+                      btn-danger" id='like'
+                    >
+                      <i class="fa fa-thumbs-up"></i> 
+                    </button>
+                  </form>
                 {% endif %}
               {% endif %}
             </div>
