@@ -103,8 +103,15 @@ class Post(db.Model):
             'id': self.id,
             'details': self.details,
             'timestamp': self.timestamp.strftime('%b %d, %Y'),
-            'user_id': self.user_id,
-            'is_private': self.is_private
+            'user_id': self.user.id,
+            'username': self.user.username,
+            'email': self.user.email,
+            'first': self.user.first_name,
+            'last': self.user.last_name,
+            'image': self.user.image_url,
+            'is_private': self.is_private,
+            'muscles': [muscle.name for muscle in self.muscles],
+            'equipment': [equipment.name for equipment in self.equipment]
         }
 
 

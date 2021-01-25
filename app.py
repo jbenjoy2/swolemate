@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
 from authlib.integrations.flask_client import OAuth
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Muscle, Equipment, Likes, PostMuscle, PostEquipment
 from forms import UserAddForm, UserEditForm, LoginForm, ForcedResetForm, PostForm
 from google_auth import id, secret
 from sqlalchemy.exc import IntegrityError
@@ -275,11 +275,28 @@ def create_post(user_id):
     user = User.query.get_or_404(user_id)
 
     form = PostForm()
+    form.muscles.choices = [(m.id, m.name) for m in Muscle.query.all()]
+    form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
 
     if form.validate_on_submit():
+        details = form.details.data
+        is_private = form.is_private.data
+        muscles = form.muscles.data
+        equipment = form.equipment.data
         post = Post(details=form.details.data,
                     is_private=form.is_private.data, user_id=user_id)
         db.session.add(post)
+        db.session.commit()
+        muscles_to_add = []
+        equipment_to_add = []
+        for muscle in muscles:
+            muscle_post = PostMuscle(post_id=post.id, muscle_id=muscle)
+            muscles_to_add.append(muscle_post)
+        for choice in equipment:
+            equipment_post = PostEquipment(
+                post_id=post.id, equipment_id=choice)
+            equipment_to_add.append(equipment_post)
+        db.session.add_all(muscles_to_add+equipment_to_add)
         db.session.commit()
         flash('New post created!', 'success')
         return redirect(url_for('show_user_profile', user_id=user_id))

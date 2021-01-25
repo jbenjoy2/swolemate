@@ -94,6 +94,14 @@ li.anon:hover {
 	right: 0;
 	z-index: 1;
 }
+#all-posts .post-link {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+}
 
 #post .list-group-item a:not(.post-link) {
 	position: relative;
@@ -121,6 +129,9 @@ li.anon:hover {
 }
 
 #posts:not(.no-hover) .list-group-item:hover {
+	background-color: #535556;
+}
+#all-posts:not(.no-hover) .list-group-item:hover {
 	background-color: #535556;
 }
 
@@ -238,6 +249,10 @@ nav + .container {
 	position: relative;
 	z-index: 2;
 }
+#all-posts .list-group-item a:not(.post-link) {
+	position: relative;
+	z-index: 2;
+}
 .post-area > a {
 	color: #d9534f;
 }
@@ -252,7 +267,7 @@ nav + .container {
 
 .post-lock {
 	position: absolute;
-	top: 50%;
+	top: 80%;
 	right: 4px;
 	z-index: 3;
 }

@@ -1,6 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, RadioField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, RadioField, BooleanField, TextAreaField, SelectMultipleField, widgets
 from wtforms.validators import InputRequired, Email, Length, EqualTo
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 
 class UserAddForm(FlaskForm):
@@ -45,4 +50,6 @@ class ForcedResetForm(FlaskForm):
 
 class PostForm(FlaskForm):
     details = TextAreaField('Workout Details*', validators=[InputRequired()])
+    muscles = MultiCheckboxField('Muscles Worked', coerce=int)
+    equipment = MultiCheckboxField('Equipment used', coerce=int)
     is_private = BooleanField('Make this post private')

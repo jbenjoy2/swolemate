@@ -3,7 +3,7 @@
 {%block title%}Home{%endblock%}
 {%block content%}
 {% include 'auth_nav.html' %}
-<div class="container pb-5">
+<div class="container my-5 py-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <ul class="list-group no-hover" id="posts">
@@ -17,13 +17,25 @@
               {% if 'current_user' in session %}
                 {% if session['current_user'] == post.user.id %}
                   <form method="POST"
-                        action="/posts/{{ post.id }}/delete">
-                    <button class="btn btn-outline-danger">Delete</button>
+                        action="/posts/{{ post.id }}/edit">
+                    <button class="btn btn-outline-danger">Edit</button>
                   </form>
                 {% endif %}
               {% endif %}
             </div>
             <p class="single-post">{{ post.details }}</p>
+            <p>
+              Muscles:
+              {%for muscle in post.muscles%}
+            <small>- {{muscle.name}} - </small>
+            {% endfor %}
+            </p>
+            <p class="mt-2">Equipment:
+              {%for equipment in post.equipment%}
+            <small>- {{equipment.name}} - </small>
+            {% endfor %}
+            </p>
+            
             <span class="text-muted">{{ post.timestamp.strftime('%d %B, %Y') }}</span>
           </div>
         </li>
@@ -32,13 +44,7 @@
   </div>
   
 </div>
-{% if session['current_user'] == post.user.id %}
-<div class="container pt-5 mt-5">
-  <div class="row justify-content-center">
-    <a href="/posts/{{post.id}}/edit" class="btn btn-secondary text-danger col-md-3">Edit This Post</a>
-  </div>
-</div>
-{%endif%}
+
   
 
 {% endblock %}
