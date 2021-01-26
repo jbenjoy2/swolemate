@@ -4,9 +4,10 @@ async function get_posts(page) {
 	let response = await axios.get(`/api/posts?page=${page}`);
 	let posts = response.data.posts;
 	if (response.data.has_next) {
+		$('#loadMore').show();
 		pageCounter++;
 	} else {
-		$('#loadMore').remove();
+		$('#loadMore').hide();
 	}
 	return posts;
 }
@@ -27,11 +28,11 @@ function generateMarkup(post) {
         <p>${post.details}</p>
         <p>
             Muscles:
-                <small>- ${post.muscles.join('- -')} -</small>
+                <small class='text-success'>- ${post.muscles.join('- -')} -</small>
         </p>
         <p class="mt-2">Equipment:
             
-        <small>- ${post.equipment.join('- -')} -</small>
+        <small class='text-info'>- ${post.equipment.join('- -')} -</small>
         </p>
         </div>
     </li>`;
@@ -48,8 +49,21 @@ async function addPosts() {
 }
 
 $(function() {
+	$('#topBtn').fadeOut(0);
 	addPosts();
 	$('#loadMore').on('click', function() {
 		addPosts();
+	});
+
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > 300) {
+			$('#topBtn').fadeIn(300);
+		} else {
+			$('#topBtn').fadeOut(300);
+		}
+	});
+
+	$('#topBtn').click(function() {
+		$('html, body').animate({ scrollTop: 0 }, 400);
 	});
 });

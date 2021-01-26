@@ -13,7 +13,7 @@
           </a>
           <div class="post-area">
             <div class="post-heading">
-              <a href="/user/{{ post.user.id }}">@{{ post.user.username }}</a>
+              <a href="/user/{{ post.user.id }}"> {{post.user.first_name}}  {{post.user.last_name}} - @{{ post.user.username }}</a>
               {% if 'current_user' in session %}
                 {% if session['current_user'] == post.user.id %}
                   <form method="POST"
@@ -25,7 +25,7 @@
                     <button class="
                       btn 
                       btn-sm 
-                      btn-danger" id='like'
+                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
                     >
                       <i class="fa fa-thumbs-up"></i> 
                     </button>
@@ -37,7 +37,7 @@
             <p>
               Muscles:
               {%for muscle in post.muscles%}
-            <small>- {{muscle.name}} -</small>
+            <small class="text-success">- {{muscle.name}} -</small>
             {% endfor %}
             </p>
             <p class="mt-2">Equipment:

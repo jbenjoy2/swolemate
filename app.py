@@ -193,6 +193,7 @@ def edit_user_profile(user_id):
             user.first_name = form.first_name.data.capitalize()
             user.last_name = form.last_name.data.capitalize()
             user.image_url = form.image_url.data or User.image_url.default.arg
+            user.cover_url = form.cover_url.data or User.cover_url.default.arg
             user.bio = form.bio.data
 
             db.session.commit()
@@ -239,7 +240,7 @@ def show_home_page():
     if CURRENT_USER_KEY in session:
         user = User.query.get(session[CURRENT_USER_KEY])
         if user:
-            return render_template('home.html', user=user)
+            return render_template('home.html', user=user, home_active='active')
 
     # redirect to sign in page if no user is logged in
 
@@ -260,8 +261,12 @@ def show_user_profile(user_id):
     if CURRENT_USER_KEY not in session:
         raise Unauthorized
     user = User.query.get_or_404(user_id)
+    if user_id == session[CURRENT_USER_KEY]:
+        profile_active = 'active'
+    else:
+        profile_active = ''
 
-    return render_template('user_profile.html', user=user)
+    return render_template('user_profile.html', user=user, profile_active=profile_active)
 
 # route for posting workouts
 
@@ -303,8 +308,92 @@ def create_post(user_id):
     return render_template('add_post.html', form=form, user=user)
 
 
-@ app.route('/posts/<int:post_id>')
+@app.route('/posts/<int:post_id>')
 def show_post(post_id):
+    if CURRENT_USER_KEY not in session:
+        flash("Access unauthorized.", "danger")
+        return redirect('/')
     post = Post.query.get_or_404(post_id)
-    user = User.query.get_or_404(post.user_id)
+    user = User.query.get(session[CURRENT_USER_KEY])
     return render_template('show_post.html', post=post, user=user)
+
+
+@app.route('/posts/<int:post_id>/like', methods=['POST'])
+def toggle_like(post_id):
+    if CURRENT_USER_KEY not in session:
+        flash("Access unauthorized.", "danger")
+        return redirect('/')
+
+    liked_post = Post.query.get_or_404(post_id)
+    user = User.query.get(session[CURRENT_USER_KEY])
+
+    # toggle the like by removing from user likes
+    if liked_post in user.likes:
+        user.likes.remove(liked_post)
+    else:
+        user.likes.append(liked_post)
+
+    db.session.commit()
+    if user.likes:
+        return redirect(url_for('show_likes', user_id=user.id))
+    else:
+        return redirect('/')
+
+
+@ app.route('/user/<int:user_id>/likes')
+def show_likes(user_id):
+    """show all of the user's liked warbles"""
+
+    if CURRENT_USER_KEY not in session:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template('likes.html', user=user, likes=user.likes, like_active='active')
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
+def edit_post(post_id):
+    if CURRENT_USER_KEY not in session:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    post = Post.query.get_or_404(post_id)
+    user = User.query.get(session[CURRENT_USER_KEY])
+
+    if post.user_id != session[CURRENT_USER_KEY]:
+        raise Unauthorized
+
+    form = PostForm(obj=post)
+    muscles = form.muscles
+    equipment = form.equipment
+
+    form.muscles.choices = [(m.id, m.name) for m in Muscle.query.all()]
+    form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
+
+    if form.validate_on_submit():
+        post.details = form.details.data
+        post.is_private = form.is_private.data
+        muscles = form.muscles.data
+        equipment = form.equipment.data
+        db.session.add(post)
+        db.session.commit()
+        muscles_to_add = []
+        equipment_to_add = []
+        for muscle in muscles:
+            muscle_post = PostMuscle(post_id=post.id, muscle_id=muscle)
+            muscles_to_add.append(muscle_post)
+        for choice in equipment:
+            equipment_post = PostEquipment(
+                post_id=post.id, equipment_id=choice)
+            equipment_to_add.append(equipment_post)
+        db.session.add_all(muscles_to_add+equipment_to_add)
+        db.session.commit()
+
+        return redirect(f'/posts/{post_id}')
+    else:
+        form.muscles.data = [m.id for m in post.muscles]
+        form.equipment.data = [e.id for e in post.equipment]
+
+        return render_template('edit_post.html', form=form, post=post, user=user)

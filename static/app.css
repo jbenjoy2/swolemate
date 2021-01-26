@@ -151,12 +151,13 @@ li.anon:hover {
 	margin-top: 3px;
 }
 
-#warbler-hero {
-	height: 360px;
+#swolemate-cover {
+	height: 400px;
 	margin-top: -16px;
 	opacity: 0.7;
 	background-size: cover;
-	background-position: center center;
+	background-position-x: center;
+	background-position-y: 25%;
 }
 
 #profile-avatar {
@@ -294,7 +295,23 @@ nav + .container {
 }
 
 #like {
+	position: absolute;
+	top: 60px;
+	right: 4px;
 	border-radius: 50%;
+	z-index: 5;
+}
+
+@media only screen and (max-width: 321px) {
+	#like {
+		top: 4px;
+	}
+}
+@media only screen and (min-width: 375px) and (max-width: 767px) {
+	#like {
+		top: 30px;
+		right: 2px;
+	}
 }
 
 .single-post {
@@ -321,4 +338,17 @@ img#nav-prof-pic {
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+
+#topBtn {
+	position: fixed;
+	bottom: 10px;
+	right: 100px;
+}
+
+@media only screen and (max-width: 767px) {
+	#topBtn {
+		position: fixed;
+		right: 20px;
+	}
 }

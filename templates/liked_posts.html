@@ -2,7 +2,7 @@
     <div class="col-sm-6">
         <ul class="list-group" id="posts">
     
-          {% for post in user.posts %}
+          {% for post in likes %}
     
             <li class="list-group-item my-2">
                 <a href="/posts/{{ post.id }}" class="post-link">
@@ -11,12 +11,21 @@
                 </a>
         
                   <div class="post-area">
-                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
+                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ post.user.username }}</a>
                     {% if post.is_private %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
                     {% else %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
                     {%endif%}
+                    <form method="POST" action="/posts/{{post.id}}/like" class="messages-like inline">
+                        <button class="
+                          btn 
+                          btn-sm 
+                          btn-danger" id='like'
+                        >
+                          <i class="fa fa-thumbs-up"></i> 
+                        </button>
+                      </form>
                     <p style="white-space: pre-line">{{ post.details }}</p>
                     <p>
               Muscles:
@@ -40,5 +49,4 @@
     
         </ul>
       </div>
-
 

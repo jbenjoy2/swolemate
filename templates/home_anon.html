@@ -6,6 +6,22 @@
 {% block content%}
 {% include 'anon_nav.html'%}
 <div class="container">
+  <div class="jumbotron py-1" style="background:none">
+    <h1 class="text-center">
+      Welcome to
+    </h1>
+    <div class="row justify-content-center"> 
+      <img src="/static/logo.png" alt="" class="">
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <p class="text-center col-8">
+        Swolemate is a way for people to both share their own workouts, and discover new ones to try! Feel free to browse some of the public posts below, or log in for full access!
+      </p>
+    </div>
+   
+    
+  </div>
 
   
   
@@ -96,8 +112,9 @@
         </div>
         
     </div>
-    <div class="row justify-content-center my-5">
-        <button class="btn btn-lg btn-info" id='loadMore'>Load More</button>
+    <div class="row justify-content-center pb-3 my-3">
+        <button class="btn btn-lg btn-info" style="display: none;" id='loadMore'>Load More</button>
+        <button class="btn btn-lg btn-link" id='topBtn'>Back to Top</button>
     </div>
    
 
@@ -105,9 +122,6 @@
 </div>
 <div class="container my-3">
     {% include 'flash.html'%}
-</div>
-<div class="container-fluid my-3 p-2">
-    {% include 'footer.html'%}
 </div>
 
 {%endblock%}

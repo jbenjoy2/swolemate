@@ -24,6 +24,8 @@ class User(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text, default='/static/default-pic.png')
+    cover_url = db.Column(
+        db.Text, default='https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8Z3ltfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60')
     bio = db.Column(db.Text)
     # set up relationships
     posts = db.relationship('Post', order_by='Post.id.desc()')

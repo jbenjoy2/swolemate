@@ -4,9 +4,10 @@ async function get_posts(page) {
 	let response = await axios.get(`/api/posts?page=${page}`);
 	let posts = response.data.posts;
 	if (response.data.has_next) {
+		$('#loadMore').show();
 		pageCounter++;
 	} else {
-		$('#loadMore').remove();
+		$('#loadMore').hide();
 	}
 	return posts;
 }
@@ -67,20 +68,36 @@ function generateMuscles(post) {
 
 async function addPosts() {
 	let posts = await get_posts(pageCounter);
-	console.log(posts);
 	let markUp;
-	for (let post of posts) {
-		if (post.is_private) {
-			markUp = generatePrivateMarkup(post);
-		} else markUp = generatePublicMarkup(post);
+	if (posts.length > 0) {
+		for (let post of posts) {
+			if (post.is_private) {
+				markUp = generatePrivateMarkup(post);
+			} else markUp = generatePublicMarkup(post);
 
-		$('#posts').append(markUp);
+			$('#posts').append(markUp);
+		}
+	} else {
+		$('#posts').append(`<h1 class='text-center'>No Posts To Show</h1>`);
 	}
 }
 
 $(function() {
+	$('#topBtn').fadeOut(0);
 	addPosts();
 	$('#loadMore').on('click', function() {
 		addPosts();
+	});
+
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > 300) {
+			$('#topBtn').fadeIn(300);
+		} else {
+			$('#topBtn').fadeOut(300);
+		}
+	});
+
+	$('#topBtn').click(function() {
+		$('html, body').animate({ scrollTop: 0 }, 400);
 	});
 });

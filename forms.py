@@ -20,6 +20,7 @@ class UserAddForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     image_url = StringField('(Optional) Image URL')
+    cover_url = StringField('(Optional) Cover Photo URL')
 
 
 class UserEditForm(FlaskForm):
@@ -30,6 +31,7 @@ class UserEditForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     image_url = StringField('(Optional) Image URL')
+    cover_url = StringField('(Optional) Cover Photo URL')
     bio = TextAreaField('(Optional) Tell us about yourself!')
 
 
