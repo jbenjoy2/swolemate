@@ -13,7 +13,7 @@ async function get_posts(page) {
 }
 
 function generatePublicMarkup(post) {
-	return `<li class="list-group-item my-2">
+	return `<li class="list-group-item mb-2">
 <a href="/posts/${post.id}" class="post-link">
 <a href="/user/${post.user_id}">
 	<img src="${post.image}" alt="user image" class="timeline-image" width="100px">
@@ -36,7 +36,7 @@ function generatePublicMarkup(post) {
 }
 
 function generatePrivateMarkup(post) {
-	return `<li class="list-group-item my-2">
+	return `<li class="list-group-item mb-2">
 <a href="/posts/${post.id}" class="post-link">
 <a href="/user/${post.user_id}">
 	<img src="${post.image}" alt="user image" class="timeline-image" width="100px">

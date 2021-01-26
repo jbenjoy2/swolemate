@@ -220,7 +220,7 @@ li.anon:hover {
 }
 
 .stat > .small {
-	color: #657786;
+	color: wheat;
 	font-weight: bold;
 	font-size: 12px;
 	letter-spacing: 0.02em;
@@ -351,4 +351,89 @@ img#nav-prof-pic {
 		position: fixed;
 		right: 20px;
 	}
+}
+
+.card-hero {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+#home-aside > .user-card {
+	margin-top: 0;
+	overflow: hidden;
+}
+
+#home-aside > .user-card .card-link {
+	display: flex;
+}
+
+#home-aside > .user-card .card-link > p {
+	margin-left: 0.5rem;
+	margin-top: 0.25rem;
+}
+
+#home-aside > .user-card .stat {
+	padding: 14px 0 7px;
+}
+
+#home-aside > .user-card .user-stats {
+	display: flex;
+	justify-content: space-around;
+}
+
+#home-aside > .user-card > div {
+	width: 100%;
+}
+
+#home-aside .card-link > p {
+	position: relative;
+}
+
+#home-aside .stat h4 {
+	text-align: left;
+}
+
+.card-image {
+	border: 1px solid #fff;
+	border-radius: 70px;
+	height: 70px;
+	width: 70px;
+	margin-top: -35px;
+	position: relative;
+	z-index: 1;
+}
+
+.card-link {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.user-card {
+	width: 100%;
+	padding-bottom: 100%;
+	border-radius: 5px !important;
+	border: 1px solid #ccc;
+	position: relative !important;
+	background: white;
+	margin-top: 20px;
+}
+
+.user-card > div {
+	position: absolute;
+}
+
+.image-wrapper {
+	width: 100%;
+	padding-bottom: 36%;
+	position: relative;
+	overflow: hidden;
+}
+
+p.danger-hover:hover {
+	text-decoration: underline;
+	color: lightpink !important;
 }

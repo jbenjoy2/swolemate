@@ -17,7 +17,7 @@
           <a class="nav-link" href="/user/{{session['current_user']}}">View Provile </a>
         </li>
         <li class="nav-item {{like_active}}">
-          <a class="nav-link" href="/user/{{session['current_user']}}/likes">Liked Posts</a>
+          <a class="nav-link" href="/user/{{session['current_user']}}/likes">Favorite Posts</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Pricing</a>
@@ -53,7 +53,7 @@
         </li>
         <li class="nav-item">
           <a href="/user/{{user.id}}" class="navlink">
-            <img src="{{user.image_url}}" id='nav-prof-pic' alt="" class="rounded-circle">
+            <img src="{{user.image_url}}" id='nav-prof-pic' alt="" class="rounded-circle pt-1">
           </a>
          
         </li>

@@ -11,8 +11,38 @@
 
 <div class="container mb-3">
     
-    <div class="row justify-content-center">
-        <div class="col-sm-8" id='auth-posts'>
+    <div class="row">
+
+        <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+            <div class="card user-card">
+              <div>
+                <div class="image-wrapper">
+                  <img src="{{ user.cover_url }}" alt="" class="card-hero">
+                </div>
+                <a href="/user/{{ user.id }}" class="card-link">
+                  <img src="{{ user.image_url }}"
+                       alt="Image for {{ user.username }}"
+                       class="card-image">
+                  <p class="text-danger danger-hover">@{{ user.username }}</p>
+                </a>
+                <ul class="user-stats nav nav-pills">
+                  <li class="stat">
+                    <p class="small">Posts</p>
+                    <h4 class="text-center">
+                      <a href="/user/{{ user.id }}">{{ user.posts | length }}</a>
+                    </h4>
+                  </li>
+                  <li class="stat">
+                    <p class="small">Favorites</p>
+                    <h4 class="text-center">
+                      <a href="/user/{{ user.id }}/likes">{{ user.likes | length }}</a>
+                    </h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+        <div class="col-lg-6 col-md-8 col-sm-12" id='auth-posts'>
             <ul class="list-group" id="posts">
             </ul>
         </div>
