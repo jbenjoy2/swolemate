@@ -83,14 +83,19 @@ async function addPosts() {
 }
 
 $(function() {
-	$('#topBtn').fadeOut(0);
+	if ($(window).width() <= 374) {
+		$('#topBtn').remove();
+	} else {
+		$('#topBtn').fadeOut(0);
+	}
+
 	addPosts();
 	$('#loadMore').on('click', function() {
 		addPosts();
 	});
 
 	$(window).scroll(function() {
-		if ($(this).scrollTop() > 300) {
+		if ($(this).scrollTop() > $(window).height() - 80) {
 			$('#topBtn').fadeIn(300);
 		} else {
 			$('#topBtn').fadeOut(300);

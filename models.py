@@ -132,6 +132,7 @@ class Muscle(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, unique=True, nullable=False)
     body_part = db.Column(db.Text, nullable=False)
+    # image = db.Column(db.Text, nullable=False)
 
     posts = db.relationship(
         'Post', secondary='posts_muscles', backref='muscles')
@@ -141,6 +142,7 @@ class Equipment(db.Model):
     __tablename__ = 'equipment'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, unique=True, nullable=False)
+    # image = db.Column(db.Text, nullable=False)
 
     posts = db.relationship(
         'Post', secondary='posts_equipment', backref='equipment')

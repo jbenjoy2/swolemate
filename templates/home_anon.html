@@ -70,7 +70,7 @@
             <form method="POST" id="user_form" class="text-center">
               {{ login_form.csrf_token(id='new_csrf')}}
               <img class="mb-4" src="static/logo2.png" alt="" width="150" height="150">
-              <h2 class="join-message">Login</h2>
+              <h2 class="join-message">Welcome Back!</h2>
               {% for field in login_form if field.widget.input_type != 'hidden' %}
                 {{ field(placeholder=field.label.text, class="form-control my-3") }}
                 {% for error in field.errors %}
@@ -78,7 +78,7 @@
                 {% endfor %}
               {% endfor %}
           
-              <button class="btn btn-danger btn-lg px-5 my-2">Get Swole</button>
+              <button class="btn btn-danger btn-lg px-5 my-2" id='get-swole'>Get Swole</button>
             </form>
             <div class="row justify-content-center">
               <a href="/login"class="btn btn-lg btn-secondary my-2 justify-self-center" id="google-signin">

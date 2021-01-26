@@ -14,7 +14,7 @@
     <div class="row">
 
         <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
-            <div class="card user-card">
+            <div class="card user-card mb-3">
               <div>
                 <div class="image-wrapper">
                   <img src="{{ user.cover_url }}" alt="" class="card-hero">
@@ -43,6 +43,8 @@
             </div>
           </aside>
         <div class="col-lg-6 col-md-8 col-sm-12" id='auth-posts'>
+            <hr class="to-hide">
+            <h3 class="to-hide text-center">Posts</h3>
             <ul class="list-group" id="posts">
             </ul>
         </div>
@@ -50,7 +52,7 @@
     </div>
     <div class="row justify-content-center pb-3 my-3">
         <button class="btn btn-lg btn-info" style="display:none" id='loadMore'>Load More</button>
-        <button class="btn btn-lg btn-link" id='topBtn'>Back to Top</button>
+        <button class="btn btn-lg btn-link text-danger" id='topBtn'>Back to Top</button>
 
     </div>
    

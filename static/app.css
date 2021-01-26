@@ -7,6 +7,18 @@ h1 {
 	font-family: 'Black Ops One', cursive;
 }
 
+h2.join-message {
+	font-family: 'Black Ops One', cursive;
+}
+
+h3.to-hide {
+	font-family: 'Black Ops One', cursive;
+}
+
+#get-swole {
+	font-family: 'Black Ops One', cursive;
+}
+
 li.stat > h4 > a {
 	color: #d9534f;
 }
@@ -344,12 +356,20 @@ img#nav-prof-pic {
 	position: fixed;
 	bottom: 10px;
 	right: 100px;
+	z-index: 10;
 }
 
 @media only screen and (max-width: 767px) {
 	#topBtn {
 		position: fixed;
-		right: 20px;
+		right: 0;
+		padding-left: 10px;
+	}
+}
+
+@media only screen and (max-width: 375px) {
+	#topBtn {
+		color: none;
 	}
 }
 
@@ -420,6 +440,22 @@ img#nav-prof-pic {
 	position: relative !important;
 	background: white;
 	margin-top: 20px;
+}
+
+@media only screen and (max-width: 767px) {
+	.user-card {
+		padding-bottom: 65%;
+		width: 85%;
+		margin-left: 10%;
+	}
+}
+@media only screen and (min-width: 767px) {
+	hr.to-hide {
+		display: none;
+	}
+	h3.to-hide {
+		display: none;
+	}
 }
 
 .user-card > div {
