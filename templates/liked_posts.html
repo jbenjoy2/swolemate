@@ -16,6 +16,15 @@
                     {% else %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
                     {%endif%}
+                    <form method="POST" action="/posts/{{post.id}}/like" class="messages-like">
+                    <button class="
+                      btn 
+                      btn-sm 
+                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
+                    >
+                      <i class="fa fa-thumbs-up"></i> 
+                    </button>
+                  </form>
                     <p class="text-center" style='text-decoration:underline'><b>{{post.title}}</b></p>
                     <hr style='background-color:#D9534E'>
 	                  <p class='text-light'>(CLICK FOR FULL DETAILS)</p>

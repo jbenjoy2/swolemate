@@ -86,6 +86,9 @@ def authorize():
     email = user_info['email']
     first_name = user_info['given_name'].capitalize()
     last_name = user_info['family_name'].capitalize()
+    image_url = User.image_url.default.arg
+    if user_info['picture'] != '' and user_info['picture']:
+        image_url = user_info['picture']
     user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
     # Here you use the profile/user data that you got and query your database find/register the user
     # and set ur own data in the session not the profile from google
@@ -96,7 +99,7 @@ def authorize():
 
     if not user:
         user = User.signup(email=email, password='password1', username='temporary',
-                           first_name=first_name, last_name=last_name, image_url=User.image_url.default.arg)
+                           first_name=first_name, last_name=last_name, image_url=image_url)
         db.session.commit()
         do_login(user)
         return redirect(f'/user/{user.id}/force-reset')
@@ -335,10 +338,8 @@ def toggle_like(post_id):
         user.likes.append(liked_post)
 
     db.session.commit()
-    if user.likes:
-        return redirect(url_for('show_likes', user_id=user.id))
-    else:
-        return redirect('/')
+
+    return redirect(url_for('show_likes', user_id=user.id))
 
 
 @ app.route('/user/<int:user_id>/likes')

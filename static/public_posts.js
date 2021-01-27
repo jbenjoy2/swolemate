@@ -18,14 +18,16 @@ async function getUserInfo(id) {
 }
 
 function generateMarkup(post) {
-	return `<li class="list-group-item my-2 no-hover">
+	return `<li class="list-group-item my-2 no-hover text-center">
         
 
     
-        <div class="post-area">
+        <div class="post-area w-75">
         <span class='text-danger'>${post.first} ${post.last} - @${post.username}</span>
         <span class="text-muted">${post.timestamp}</span>
-        <p>${post.details}</p>
+        <p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
+		<hr style='background-color:#D9534E'>
+		<p class='text-light'>(LOG IN FOR FULL DETAILS)</p>
         <p>
             Muscles:
                 <small class='text-success'>- ${post.muscles.join('- -')} -</small>
