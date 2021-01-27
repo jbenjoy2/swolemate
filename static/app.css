@@ -137,10 +137,16 @@ li.anon:hover {
 	margin-left: 10px;
 }
 
+@media only screen and (max-width: 375px) {
+	.post-area {
+		margin-left: 0;
+	}
+}
+
 #posts .list-group-item {
 	display: flex;
 	align-items: flex-start;
-	padding: 7px 20px 12px;
+	padding: 7px 10px 12px;
 	border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
@@ -290,8 +296,8 @@ nav + .container {
 
 .post-lock {
 	position: absolute;
-	top: 80%;
 	right: 4px;
+	top: 87%;
 	z-index: 3;
 }
 
@@ -327,10 +333,9 @@ nav + .container {
 }
 
 .single-post {
-	font-size: 27px;
-	line-height: 32px;
+	font-size: 20px;
 	letter-spacing: 0.01em;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .navbar {
@@ -364,12 +369,6 @@ img#nav-prof-pic {
 		position: fixed;
 		right: 0;
 		padding-left: 10px;
-	}
-}
-
-@media only screen and (max-width: 375px) {
-	#topBtn {
-		color: none;
 	}
 }
 

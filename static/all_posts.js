@@ -19,10 +19,12 @@ function generatePublicMarkup(post) {
 	<img src="${post.image}" alt="user image" class="timeline-image" width="100px">
 </a>
 
-	<div class="post-area">
+	<div class="post-area w-75">
 	<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
 	<span class="text-muted">${post.timestamp}</span>
-	<p>${post.details}</p>
+	<p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
+	<hr style='background-color:#D9534E'>
+	<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 	<p>
 		Muscles:
 			<small>- ${post.muscles.join('- -')} -</small>
@@ -42,10 +44,12 @@ function generatePrivateMarkup(post) {
 	<img src="${post.image}" alt="user image" class="timeline-image" width="100px">
 </a>
 
-	<div class="post-area">
+	<div class="post-area w-75">
 	<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
 	<span class="text-muted">${post.timestamp}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
-	<p>${post.details}</p>
+	<p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
+	<hr style='background-color:#D9534E'>
+	<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 	<p>
 		Muscles:
 			<small>- ${post.muscles.join('- -')} -</small>
@@ -56,14 +60,6 @@ function generatePrivateMarkup(post) {
 	</p>
 	</div>
 </li>`;
-}
-
-function generateMuscles(post) {
-	let markup = `Muscles:`;
-	for (let muscle of post.muscles) {
-		markup += `<small>- ${muscle} -</small>`;
-	}
-	return markup;
 }
 
 async function addPosts() {

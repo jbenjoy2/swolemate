@@ -51,7 +51,10 @@ class ForcedResetForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    details = TextAreaField('Workout Details*', validators=[InputRequired()])
+    title = StringField(
+        'Title*', validators=[InputRequired(), Length(min=6, max=50)])
+    details = TextAreaField(
+        'Workout Details*', validators=[InputRequired()])
     muscles = MultiCheckboxField(
         'Muscles Worked', coerce=int, validators=[InputRequired()])
     equipment = MultiCheckboxField(

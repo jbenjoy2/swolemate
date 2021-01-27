@@ -1,5 +1,4 @@
-
-    <div class="col-sm-6">
+   <div class="col-lg-6 col-md-8 col-sm-12">
         <ul class="list-group" id="posts">
     
           {% for post in user.posts %}
@@ -10,14 +9,16 @@
                     <img src="{{ post.user.image_url }}" alt="user image" class="timeline-image" width="100px">
                 </a>
         
-                  <div class="post-area">
+                  <div class="post-area w-75">
                     <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
                     {% if post.is_private %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
                     {% else %}
                     <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
                     {%endif%}
-                    <p style="white-space: pre-line">{{ post.details }}</p>
+                    <p class="text-center" style='text-decoration:underline'><b>{{post.title}}</b></p>
+                    <hr style='background-color:#D9534E'>
+	                  <p class='text-light'>(CLICK FOR FULL DETAILS)</p>
                     <p>
               Muscles:
               {%for muscle in post.muscles%}

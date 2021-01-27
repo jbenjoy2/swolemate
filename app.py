@@ -284,11 +284,12 @@ def create_post(user_id):
     form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
 
     if form.validate_on_submit():
+        title = form.title.data
         details = form.details.data
         is_private = form.is_private.data
         muscles = form.muscles.data
         equipment = form.equipment.data
-        post = Post(details=form.details.data,
+        post = Post(title=title, details=form.details.data,
                     is_private=form.is_private.data, user_id=user_id)
         db.session.add(post)
         db.session.commit()
@@ -373,6 +374,7 @@ def edit_post(post_id):
     form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
 
     if form.validate_on_submit():
+        post.title = form.title.data
         post.details = form.details.data
         post.is_private = form.is_private.data
         muscles = form.muscles.data

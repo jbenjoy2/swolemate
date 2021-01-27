@@ -12,8 +12,20 @@
         {{ form.hidden_tag() }}
         <div class="form-row justify-content-center">
             <div class="form-group col-md-6">
+             {{form.title.label}}
+             {{form.title(class_='form-control')}}
+                <div class="title-errors">
+                    {% for error in form.title.errors %}  
+                    <span class="text-danger">{{error}}</span>
+                    {% endfor %}
+                </div>
+            </div>  
+            
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="form-group col-md-6">
              {{form.details.label}}
-             {{form.details(class_='form-control')}}
+             {{form.details(class_='form-control', rows=15)}}
             </div>  
         </div>
         <div class="row justify-content-center d-flex flex-wrap">
@@ -74,7 +86,7 @@
         <div class="form-group row justify-content-center">
             <a href="/posts/{{post.id}}" class="btn btn-lg btn-outline-danger col-md-2 form-control mx-3 my-2">Cancel</a>
             <a class="btn btn-danger btn-lg form-control col-md-2 mx-3 my-2" data-toggle="modal" data-target="#deleteModal">
-                Delete Post
+                Delete
             </a>
             <button class="btn btn-lg btn-success col-md-2 form-control mx-3 my-2" type='submit'>Submit</button>
         </div>
@@ -92,11 +104,11 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <span class="text-warning">Are you sure you want to delete this post? (This action can't be undone)</span>
+          <span class="text-danger">Are you sure you want to delete this post? (This action can't be undone)</span>
           <br>
           <form action="/posts/{{post.id}}/delete" method="post" class="mt-3 mb-0">
             <div class="form-group row justify-content-around">
-                <button type="button" class="btn btn-warning form-control col-5" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-success form-control col-5" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger form-control col-5">Delete</button>
             </div>
             

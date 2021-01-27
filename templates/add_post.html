@@ -12,9 +12,27 @@
         {{ form.hidden_tag() }}
         <div class="form-row justify-content-center">
             <div class="form-group col-md-6">
-             {{form.details.label}}
-             {{form.details(class_='form-control')}}
+             {{form.title.label}}
+             {{form.title(class_='form-control')}}
+                <div class="title-errors">
+                    {% for error in form.title.errors %}  
+                    <span class="text-danger">{{error}}</span>
+                    {% endfor %}
+                </div>
             </div>  
+            
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="form-group col-md-6">
+             {{form.details.label}}
+             {{form.details(class_='form-control', rows=15)}}
+             <div class="details-errors">
+                {% for error in form.details.errors %}  
+                <span class="text-danger">{{error}}</span>
+                {% endfor %}
+            </div>
+            </div>  
+            
         </div>
         <div class="row justify-content-center d-flex flex-wrap">
             <div class="form-group col-md-3">
