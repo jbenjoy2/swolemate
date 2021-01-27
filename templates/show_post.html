@@ -26,7 +26,11 @@
                       btn-sm 
                       {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
                     >
-                      <i class="fa fa-thumbs-up"></i> 
+                    {% if post in user.likes %}
+                    <i class="fas fa-star"></i>
+                    {% else %}
+                    <i class="far fa-star"></i>
+                    {% endif %}
                     </button>
                   </form>
                   {%else%}
