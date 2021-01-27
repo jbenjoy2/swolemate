@@ -78,7 +78,7 @@
                         {{form.is_private(class_='form-check-input')}}
                         {{form.is_private.label}}
                         <div class="input-group-append">
-                            <a href="#" id='private-pop' title='Private Post' data-toggle='popover' data-trigger='hover' data-content='A private post can only be seen by other logged-in users, and will not be shown on the main page to anonymous users'><i class="far fa-question-circle mx-3 text-info"></i></a>
+                            <a href="#" id='private-pop' title='Private Post' data-toggle='popover' data-trigger='focus' data-content='A private post can only be seen by other logged-in users, and will not be shown on the main page to anonymous users'><i class="far fa-question-circle mx-3 text-info"></i></a>
                         </div>
                     </div>
                     
@@ -97,8 +97,12 @@
     </form>
     </div>
 
-    <script>
-        $('a#private-pop').on('click', function(e) {e.preventDefault(); return true;});
-    </script>
+
+ 
     
+{%endblock%}
+{%block scripts%}
+<script>
+    $('a#private-pop').on('click', function(e) {e.preventDefault(); return true;});
+</script>
 {%endblock%}
