@@ -82,7 +82,8 @@ class User(db.Model):
             'username': self.username,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'image_url': self.image_url
+            'image_url': self.image_url,
+            'cover_url': self.cover_url
         }
 
 
@@ -107,13 +108,7 @@ class Post(db.Model):
             'title': self.title,
             'details': self.details,
             'timestamp': self.timestamp.strftime('%b %d, %Y'),
-            'user_id': self.user.id,
-            'username': self.user.username,
-            'email': self.user.email,
-            'first': self.user.first_name,
-            'last': self.user.last_name,
-            'image': self.user.image_url,
-            'is_private': self.is_private,
+            'user': self.user.serialize(),
             'muscles': [muscle.name for muscle in self.muscles],
             'equipment': [equipment.name for equipment in self.equipment]
         }

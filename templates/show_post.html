@@ -33,16 +33,7 @@
                     {% endif %}
                     </button>
                   </form>
-                  {%else%}
-                  <form method="POST" action="/posts/{{post.id}}/like" class="messages-like">
-                    <button class="
-                      btn 
-                      btn-sm 
-                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
-                    >
-                      <i class="fa fa-thumbs-up"></i> 
-                    </button>
-                  </form>
+                  
                 {% endif %}
               {% endif %}
             </div>
@@ -55,7 +46,7 @@
             </p>
             <p class="mt-2">Equipment:
               {%for equipment in post.equipment%}
-            <small>- {{equipment.name}} -</small>
+            <small class="text-info">- {{equipment.name}} -</small>
             {% endfor %}
             </p>
             

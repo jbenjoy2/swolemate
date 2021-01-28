@@ -16,23 +16,24 @@ $(function() {
 	function generatePublicMarkup(post) {
 		return `<li class="list-group-item mb-2">
 	<a href="/posts/${post.id}" class="post-link">
-	<a href="/user/${post.user_id}">
-		<img src="${post.image}" alt="user image" class="timeline-image" width="100px">
+	<a href="/user/${post.user.id}">
+		<img src="${post.user.image_url}" alt="user image" class="timeline-image" width="100px">
 	</a>
 	
 		<div class="post-area w-75">
-		<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
+		<a href="/user/${post
+			.user.id}">${post.user.first_name} ${post.user.last_name} - @${post.user.username}</a>
 		<span class="text-muted">${post.timestamp}</span>
 		<p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
 		<hr style='background-color:#D9534E'>
 		<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 		<p>
 			Muscles:
-				<small>- ${post.muscles.join('- -')} -</small>
+				<small class='text-success'>- ${post.muscles.join('- -')} -</small>
 		</p>
 		<p class="mt-2">Equipment:
 			
-		<small>- ${post.equipment.join('- -')} -</small>
+		<small class='text-info'>- ${post.equipment.join('- -')} -</small>
 		</p>
 		</div>
 	</li>`;
@@ -41,23 +42,24 @@ $(function() {
 	function generatePrivateMarkup(post) {
 		return `<li class="list-group-item mb-2">
 	<a href="/posts/${post.id}" class="post-link">
-	<a href="/user/${post.user_id}">
-		<img src="${post.image}" alt="user image" class="timeline-image" width="100px">
+	<a href="/user/${post.user.id}">
+		<img src="${post.user.image_url}" alt="user image" class="timeline-image" width="100px">
 	</a>
 	
 		<div class="post-area w-75">
-		<a href="/user/${post.user_id}">${post.first} ${post.last} - @${post.username}</a>
+		<a href="/user/${post
+			.user.id}">${post.user.first_name} ${post.user.last_name} - @${post.user.username}</a>
 		<span class="text-muted">${post.timestamp}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
 		<p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
 		<hr style='background-color:#D9534E'>
 		<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 		<p>
 			Muscles:
-				<small>- ${post.muscles.join('- -')} -</small>
+				<small class='text-success'>- ${post.muscles.join('- -')} -</small>
 		</p>
 		<p class="mt-2">Equipment:
 			
-		<small>- ${post.equipment.join('- -')} -</small>
+		<small class='text-info'>- ${post.equipment.join('- -')} -</small>
 		</p>
 		</div>
 	</li>`;
@@ -100,7 +102,7 @@ $(function() {
 		});
 
 		$('#topBtn').click(function() {
-			$('html, body').animate({ scrollTop: $(window).height() }, 400);
+			$('html, body').animate({ scrollTop: 0 }, 400);
 		});
 	});
 });
