@@ -82,7 +82,6 @@ def authorize():
     # userinfo contains stuff u specificed in the scrope
     resp = google.get('userinfo')
     user_info = resp.json()
-    print(user_info)
     email = user_info['email']
     first_name = user_info['given_name'].capitalize()
     last_name = user_info['family_name'].capitalize()

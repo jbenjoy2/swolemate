@@ -1,24 +1,25 @@
-pageCounter = 1;
+$(function() {
+	pageCounter = 1;
 
-async function get_posts(page) {
-	let response = await axios.get(`/api/posts?page=${page}`);
-	let posts = response.data.posts;
-	if (response.data.has_next) {
-		$('#loadMore').show();
-		pageCounter++;
-	} else {
-		$('#loadMore').hide();
+	async function get_posts(page) {
+		let response = await axios.get(`/api/posts?page=${page}`);
+		let posts = response.data.posts;
+		if (response.data.has_next) {
+			$('#loadMore').show();
+			pageCounter++;
+		} else {
+			$('#loadMore').hide();
+		}
+		return posts;
 	}
-	return posts;
-}
 
-async function getUserInfo(id) {
-	let response = await axios.get(`/api/users/${id}`);
-	return response.data;
-}
+	async function getUserInfo(id) {
+		let response = await axios.get(`/api/users/${id}`);
+		return response.data;
+	}
 
-function generateMarkup(post) {
-	return `<li class="list-group-item my-2 no-hover text-center">
+	function generateMarkup(post) {
+		return `<li class="list-group-item my-2 no-hover text-center">
         
 
     
@@ -38,34 +39,34 @@ function generateMarkup(post) {
         </p>
         </div>
     </li>`;
-}
-
-async function addPosts() {
-	let posts = await get_posts(pageCounter);
-	console.log(posts);
-	let markUp;
-	for (let post of posts) {
-		markUp = generateMarkup(post);
-		$('#anon-posts').append(markUp);
 	}
-}
 
-$(function() {
-	$('#topBtn').fadeOut(0);
-	addPosts();
-	$('#loadMore').on('click', function() {
-		addPosts();
-	});
-
-	$(window).scroll(function() {
-		if ($(this).scrollTop() > 300) {
-			$('#topBtn').fadeIn(300);
-		} else {
-			$('#topBtn').fadeOut(300);
+	async function addPosts() {
+		let posts = await get_posts(pageCounter);
+		let markUp;
+		for (let post of posts) {
+			markUp = generateMarkup(post);
+			$('#anon-posts').append(markUp);
 		}
-	});
+	}
 
-	$('#topBtn').click(function() {
-		$('html, body').animate({ scrollTop: 0 }, 400);
+	$(function() {
+		$('#topBtn').fadeOut(0);
+		addPosts();
+		$('#loadMore').on('click', function() {
+			addPosts();
+		});
+
+		$(window).scroll(function() {
+			if ($(this).scrollTop() > 300) {
+				$('#topBtn').fadeIn(300);
+			} else {
+				$('#topBtn').fadeOut(300);
+			}
+		});
+
+		$('#topBtn').click(function() {
+			$('html, body').animate({ scrollTop: 0 }, 400);
+		});
 	});
 });

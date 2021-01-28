@@ -12,4 +12,6 @@ function handlerOut() {
 	$like.append('<i class="far fa-star no-like"></i>');
 }
 
-$like.hover(handlerIn, handlerOut);
+if ($('button#like > i').hasClass('no-like')) {
+	$like.hover(handlerIn, handlerOut);
+}

@@ -27,9 +27,9 @@
                       {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
                     >
                     {% if post in user.likes %}
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star liked"></i>
                     {% else %}
-                    <i class="far fa-star"></i>
+                    <i class="far fa-star no-like"></i>
                     {% endif %}
                     </button>
                   </form>
