@@ -41,7 +41,7 @@
             <p>
               Muscles:
               {%for muscle in post.muscles%}
-            <small class="text-success">- {{muscle.name}} -</small>
+            <small><a class="text-success" data-toggle="modal" href="#{{muscle.name}}Modal">- {{muscle.name}} -</a></small>
             {% endfor %}
             </p>
             <p class="mt-2">Equipment:
@@ -57,6 +57,26 @@
                     {%endif%}
           </div>
         </li>
+        {%for muscle in post.muscles%}
+      <div class="modal fade" id="{{muscle.name}}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="{{muscle.name}}ModalLabel">{{muscle.name}} - {{muscle.body_part}} </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body text-center">
+              <img src="/static/muscles/{{muscle.name}}.jpg" alt="">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
       </ul>
     </div>
   </div>
@@ -68,5 +88,5 @@
 {% endblock %}
 
 {%block scripts%}
-<script src="/static/stars.js"></script>
+<script src="/static/javascript/stars.js"></script>
 {%endblock%}

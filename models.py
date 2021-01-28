@@ -109,8 +109,8 @@ class Post(db.Model):
             'details': self.details,
             'timestamp': self.timestamp.strftime('%b %d, %Y'),
             'user': self.user.serialize(),
-            'muscles': [muscle.name for muscle in self.muscles],
-            'equipment': [equipment.name for equipment in self.equipment]
+            'muscles': [muscle.serialize() for muscle in self.muscles],
+            'equipment': [equipment.serialize() for equipment in self.equipment]
         }
 
 
@@ -134,6 +134,13 @@ class Muscle(db.Model):
     posts = db.relationship(
         'Post', secondary='posts_muscles', backref='muscles')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'body_part': self.body_part
+        }
+
 
 class Equipment(db.Model):
     __tablename__ = 'equipment'
@@ -143,6 +150,12 @@ class Equipment(db.Model):
 
     posts = db.relationship(
         'Post', secondary='posts_equipment', backref='equipment')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
 
 class PostMuscle(db.Model):

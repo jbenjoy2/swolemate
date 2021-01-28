@@ -29,11 +29,13 @@ $(function() {
 		<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 		<p>
 			Muscles:
-				<small class='text-success'>- ${post.muscles.join('- -')} -</small>
+				<small class='text-success'>- ${post.muscles.map((muscle) => muscle.name).join('-')} -</small>
 		</p>
 		<p class="mt-2">Equipment:
 			
-		<small class='text-info'>- ${post.equipment.join('- -')} -</small>
+		<small class='text-info'>- ${post.equipment
+			.map((equipment) => equipment.name)
+			.join('-')}  -</small>
 		</p>
 		</div>
 	</li>`;
@@ -55,11 +57,14 @@ $(function() {
 		<p class='text-light'>(CLICK FOR FULL DETAILS)</p>
 		<p>
 			Muscles:
-				<small class='text-success'>- ${post.muscles.join('- -')} -</small>
+				<small class='text-success'>- ${post.muscles.map((muscle) => muscle.name).join('-')} -</small>
 		</p>
 		<p class="mt-2">Equipment:
 			
-		<small class='text-info'>- ${post.equipment.join('- -')} -</small>
+		<small class='text-info'>- ${post.equipment
+			.map((equipment) => equipment.name)
+			.join('-')}  -</small>
+		</p>
 		</p>
 		</div>
 	</li>`;

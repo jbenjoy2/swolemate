@@ -30,12 +30,15 @@ $(function() {
 		<hr style='background-color:#D9534E'>
 		<p class='text-light'>(LOG IN FOR FULL DETAILS)</p>
         <p>
-            Muscles:
-                <small class='text-success'>- ${post.muscles.join('- -')} -</small>
-        </p>
-        <p class="mt-2">Equipment:
-            
-        <small class='text-info'>- ${post.equipment.join('- -')} -</small>
+			Muscles:
+				<small class='text-success'>- ${post.muscles.map((muscle) => muscle.name).join('-')} -</small>
+		</p>
+		<p class="mt-2">Equipment:
+			
+		<small class='text-info'>- ${post.equipment
+			.map((equipment) => equipment.name)
+			.join('-')}  -</small>
+		</p>
         </p>
         </div>
     </li>`;
