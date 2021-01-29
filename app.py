@@ -164,7 +164,8 @@ def register_new_user():
                 username=register_form.new_username.data,
                 first_name=register_form.first_name.data.capitalize(),
                 last_name=register_form.last_name.data.capitalize(),
-                image_url=register_form.image_url.data or User.image_url.default.arg
+                image_url=register_form.image_url.data or User.image_url.default.arg,
+                cover_url=register_form.cover_url.data or User.cover_url.default.arg
             )
             db.session.commit()
 
