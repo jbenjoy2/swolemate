@@ -262,13 +262,15 @@ def logout(user_id):
 def show_user_profile(user_id):
     if CURRENT_USER_KEY not in session:
         raise Unauthorized
-    user = User.query.get_or_404(user_id)
+    profuser = User.query.get_or_404(user_id)
+
+    user = User.query.get(session[CURRENT_USER_KEY])
     if user_id == session[CURRENT_USER_KEY]:
         profile_active = 'active'
     else:
         profile_active = ''
 
-    return render_template('user_profile.html', user=user, profile_active=profile_active)
+    return render_template('user_profile.html', profuser=profuser, user=user, profile_active=profile_active)
 
 # route for posting workouts
 

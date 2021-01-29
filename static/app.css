@@ -350,7 +350,7 @@ nav + .container {
 
 img#nav-prof-pic {
 	width: 32px;
-	border-radius: 32px;
+	border-radius: 50% !important;
 }
 
 .footer {
