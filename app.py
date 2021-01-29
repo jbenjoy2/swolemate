@@ -151,8 +151,6 @@ def show_posts():
 
 @ app.route('/register', methods=['POST'])
 def register_new_user():
-    if CURRENT_USER_KEY in session:
-        return redirect('/')
     register_form = UserAddForm()
     login_form = LoginForm()
 
