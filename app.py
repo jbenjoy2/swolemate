@@ -350,8 +350,12 @@ def show_likes(user_id):
         return redirect('/')
 
     user = User.query.get_or_404(user_id)
+    if session[CURRENT_USER_KEY] == user_id:
+        like_active = 'active'
+    else:
+        like_active = ''
 
-    return render_template('likes.html', user=user, likes=user.likes, like_active='active')
+    return render_template('likes.html', user=user, likes=user.likes, like_active=like_active)
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])

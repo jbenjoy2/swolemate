@@ -265,7 +265,8 @@ nav + .container {
 
 @media (max-width: 768px) {
 	.full-width .user-stats .stat {
-		display: none;
+		position: relative;
+		left: 85px;
 	}
 }
 
@@ -478,6 +479,7 @@ button#edit-post {
 	position: absolute;
 	top: 8px;
 	right: 2px;
+	z-index: 5;
 }
 
 button#userlike {
