@@ -41,7 +41,7 @@
               <img class="mb-4" src="static/logo.png" alt="">
               {% for field in register_form if field.widget.input_type != 'hidden' %}
                 {% for error in field.errors %}
-                  <span class="text-danger">{{ error }}</span>
+                  <p class="text-danger" id="register-errors">{{ error }}</p>
                 {% endfor %}
                 {{ field(placeholder=field.label.text, class="form-control my-3") }}
                 
