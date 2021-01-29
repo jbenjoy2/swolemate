@@ -1,4 +1,4 @@
-   <div class="col-sm-6">
+   <div class="col-lg-6 col-md-8 col-sm-12">
         <ul class="list-group" id="posts">
     
           {% for post in likes %}
@@ -20,7 +20,7 @@
                     <button class="
                       btn 
                       btn-sm 
-                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
+                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='userlike'
                     >
                     {% if post in user.likes %}
                     <i class="fas fa-star liked"></i>

@@ -18,8 +18,9 @@
                 {% if session['current_user'] == post.user.id %}
                   <form method="POST"
                         action="/posts/{{ post.id }}/edit">
-                    <button class="btn btn-outline-danger">Edit</button>
+                    <button class="btn btn-outline-danger" id='edit-post'>Edit</button>
                   </form>
+                  {% endif %}
                   <form method="POST" action="/posts/{{post.id}}/like" class="messages-like">
                     <button class="
                       btn 
@@ -35,7 +36,7 @@
                   </form>
                   
                 {% endif %}
-              {% endif %}
+              
             </div>
             <p class="single-post" style='white-space: pre-line;'>{{ post.details }}</p>
             <p>

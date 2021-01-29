@@ -322,12 +322,12 @@ nav + .container {
 
 @media only screen and (max-width: 321px) {
 	#like {
-		top: 4px;
+		top: 8px;
 	}
 }
-@media only screen and (min-width: 375px) and (max-width: 767px) {
+@media only screen and (max-width: 767px) {
 	#like {
-		top: 30px;
+		top: 60px;
 		right: 2px;
 	}
 }
@@ -471,4 +471,19 @@ img#nav-prof-pic {
 p.danger-hover:hover {
 	text-decoration: underline;
 	color: lightpink !important;
+}
+
+button#edit-post {
+	border-radius: 50px;
+	position: absolute;
+	top: 8px;
+	right: 2px;
+}
+
+button#userlike {
+	position: absolute;
+	top: 10px;
+	right: 4px;
+	border-radius: 50%;
+	z-index: 5;
 }
