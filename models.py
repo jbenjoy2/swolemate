@@ -111,6 +111,7 @@ class Post(db.Model):
             'details': self.details,
             'timestamp': self.timestamp.strftime('%b %d, %Y'),
             'user': self.user.serialize(),
+            'is_private': self.is_private,
             'muscles': [muscle.serialize() for muscle in self.muscles],
             'equipment': [equipment.serialize() for equipment in self.equipment]
         }
