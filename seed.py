@@ -7,23 +7,20 @@ db.create_all()
 
 # define initial muscle options
 
-biceps = Muscle(name='biceps', body_part='arms',
-                image='/static/muscles/biceps.jpg')
-triceps = Muscle(name='triceps', body_part='arms',
-                 image='/static/muscles/triceps.jpg')
-deltoids = Muscle(name='deltoids', body_part='shoulders',
-                  image='/static/muscles/delts.jpg')
-traps = Muscle(name='traps(trapezius)', body_part='shoulders', image=)
-lats = Muscle(name='lats(latissmus)', body_part='back', image=)
-pecs = Muscle(name='pecs(pectoralis)', body_part='chest', image=)
-forearms = Muscle(name='forearms', body_part='arms', image=)
-ab = Muscle(name='abs(abdominals)', body_part='abs', image=)
-hips = Muscle(name='hips(hip flexors)', body_part='legs', image=)
-groin = Muscle(name='groin', body_part='legs', image=)
-glutes = Muscle(name='glutes(gluteus)', body_part='legs', image=)
-quads = Muscle(name='quads(quadriceps)', body_part='legs', image=)
-hams = Muscle(name='hamstrings', body_part='legs', image=)
-calves = Muscle(name='calves', body_part='legs', image=)
+biceps = Muscle(name='biceps', body_part='arms')
+triceps = Muscle(name='triceps', body_part='arms')
+deltoids = Muscle(name='deltoids', body_part='shoulders')
+traps = Muscle(name='traps(trapezius)', body_part='shoulders')
+lats = Muscle(name='lats(latissmus)', body_part='back')
+pecs = Muscle(name='pecs(pectoralis)', body_part='chest')
+forearms = Muscle(name='forearms', body_part='arms')
+ab = Muscle(name='abs(abdominals)', body_part='abs')
+hips = Muscle(name='hips(hip flexors)', body_part='legs')
+groin = Muscle(name='groin', body_part='legs')
+glutes = Muscle(name='glutes(gluteus)', body_part='legs')
+quads = Muscle(name='quads(quadriceps)', body_part='legs')
+hams = Muscle(name='hamstrings', body_part='legs')
+calves = Muscle(name='calves', body_part='legs')
 
 db.session.add_all([biceps, triceps, deltoids, traps, lats,
                     pecs, forearms, ab, hips, groin, glutes, quads, hams, calves])
