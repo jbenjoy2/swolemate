@@ -98,7 +98,7 @@ def authorize():
 
     if not user:
         user = User.signup(email=email, password='password1', username='temporary',
-                           first_name=first_name, last_name=last_name, image_url=image_url)
+                           first_name=first_name, last_name=last_name, image_url=image_url, cover_url=User.cover_url.default.arg)
         db.session.commit()
         do_login(user)
         return redirect(f'/user/{user.id}/force-reset')
