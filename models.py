@@ -37,7 +37,7 @@ class User(db.Model):
 
     # signup/authenticate methods
     @classmethod
-    def signup(cls, email, password, username, first_name, last_name, image_url):
+    def signup(cls, email, password, username, first_name, last_name, image_url, cover_url):
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         new_user = User(
@@ -46,7 +46,8 @@ class User(db.Model):
             username=username,
             first_name=first_name,
             last_name=last_name,
-            image_url=image_url
+            image_url=image_url,
+            cover_url=cover_url
         )
 
         db.session.add(new_user)
