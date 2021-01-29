@@ -351,13 +351,14 @@ def show_likes(user_id):
         flash('Access unauthorized.', 'danger')
         return redirect('/')
 
-    user = User.query.get_or_404(user_id)
+    profuser = User.query.get_or_404(user_id)
+    user = User.query.get(session[CURRENT_USER_KEY])
     if session[CURRENT_USER_KEY] == user_id:
         like_active = 'active'
     else:
         like_active = ''
 
-    return render_template('likes.html', user=user, likes=user.likes, like_active=like_active)
+    return render_template('likes.html', user=user, profuser=profuser, likes=user.likes, like_active=like_active)
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])

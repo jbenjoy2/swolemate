@@ -10,7 +10,7 @@
                 </a>
         
                   <div class="post-area w-75">
-                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
+                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ post.user.username }}</a>
                     {% if session['current_user'] == post.user.id %}
                   <form method="POST"
                         action="/posts/{{ post.id }}/edit">
