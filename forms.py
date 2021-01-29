@@ -12,9 +12,9 @@ class UserAddForm(FlaskForm):
     new_email = StringField(
         'E-Mail', validators=[InputRequired(), Email()], render_kw={"autofocus": True})
     new_password = PasswordField('Password', validators=[
-        InputRequired(), Length(min=8), EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Confirm Password', validators=[
         InputRequired(), Length(min=8)])
+    confirm = PasswordField('Confirm Password', validators=[
+        InputRequired(), Length(min=8), EqualTo('new_password', message='Passwords must match')])
     new_username = StringField('Username', validators=[
                                InputRequired(), Length(max=30)])
     first_name = StringField('First Name', validators=[InputRequired()])
