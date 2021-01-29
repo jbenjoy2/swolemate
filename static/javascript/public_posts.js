@@ -25,7 +25,7 @@ $(function() {
     
         <div class="post-area w-75">
         <span class='text-danger'>${post
-			.user.first} ${post.user.last} - @${post.user.username}</span>
+			.user.first_name} ${post.user.last_name} - @${post.user.username}</span>
         <span class="text-muted">${post.timestamp}</span>
         <p class='text-center' style='text-decoration:underline'><b>${post.title}</b></p>
 		<hr style='background-color:#D9534E'>
