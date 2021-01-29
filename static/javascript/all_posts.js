@@ -75,7 +75,6 @@ $(function() {
 		let markUp;
 		if (posts.length > 0) {
 			for (let post of posts) {
-				console.log(post);
 				if (post.is_private) {
 					markUp = generatePrivateMarkup(post);
 				} else markUp = generatePublicMarkup(post);
