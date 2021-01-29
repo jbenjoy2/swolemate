@@ -3,73 +3,81 @@
     
           {% for post in likes %}
     
-            <li class="list-group-item my-2">
-                <a href="/posts/{{ post.id }}" class="post-link">
-                <a href="/user/{{ post.user.id }}">
-                    <img src="{{ post.user.image_url }}" alt="user image" class="timeline-image" width="100px">
-                </a>
-        
-                  <div class="post-area w-75">
-                    <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
-                    {% if post.is_private %}
-                    <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
-                    {% else %}
-                    <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
-                    {%endif%}
-                    <form method="POST" action="/posts/{{post.id}}/like" class="messages-like">
-                    <button class="
-                      btn 
-                      btn-sm 
-                      {{'btn-danger' if post in user.likes else 'btn-outline-danger'}}" id='like'
-                    >
-                    {% if post in user.likes %}
-                    <i class="fas fa-star liked"></i>
-                    {% else %}
-                    <i class="far fa-star no-like"></i>
-                    {% endif %} 
-                    </button>
-                  </form>
-                    <p class="text-center" style='text-decoration:underline'><b>{{post.title}}</b></p>
-                    <hr style='background-color:#D9534E'>
-	                  <p class='text-light'>(CLICK FOR FULL DETAILS)</p>
-                    <p>
-                      Muscles:
-                      {%for muscle in post.muscles%}
-                    <small><a class="text-success" data-toggle="modal" href="#{{muscle.name}}Modal">- {{muscle.name}} -</a></small>
-                    {% endfor %}
-            </p>
-            <p class="mt-2">Equipment:
-              {%for equipment in post.equipment%}
-            <small class="text-info">- {{equipment.name}} -</small>
-
-
-            {%for muscle in post.muscles%}
-      <div class="modal fade" id="{{muscle.name}}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="{{muscle.name}}ModalLabel">{{muscle.name}} - {{muscle.body_part}} </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body text-center">
-              <img src="/static/muscles/{{muscle.name}}.jpg" alt="">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
+          <li class="list-group-item my-2">
+            <a href="/posts/{{ post.id }}" class="post-link">
+            <a href="/user/{{ post.user.id }}">
+                <img src="{{ post.user.image_url }}" alt="user image" class="timeline-image" width="100px">
+            </a>
+    
+              <div class="post-area w-75">
+                <a href="/user/{{ post.user.id }}">{{post.user.first_name}} {{post.user.last_name}} - @{{ user.username }}</a>
+                {% if post.is_private %}
+                <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}<small class="ml-3 post-lock">Private<i class="fas fa-user-lock ml-1"></i></small></span>
+                {% else %}
+                <span class="text-muted">{{ post.timestamp.strftime('%b %d, %Y') }}</span>
+                {%endif%}
+                <p class="text-center" style='text-decoration:underline'><b>{{post.title}}</b></p>
+                <hr style='background-color:#D9534E'>
+                <p class='text-light'>(CLICK FOR FULL DETAILS)</p>
+                <p>
+          Muscles:
+          {%for muscle in post.muscles%}
+        <small><a class="text-success" data-toggle="modal" href="#{{muscle.name}}Modal">- {{muscle.name}} -</a></small>
+        {% endfor %}
+        </p>
+        <p class="mt-2">Equipment:
+          {%for equipment in post.equipment%}
+        <small><a class="text-info" data-toggle="modal" href="#{{equipment.name}}Modal">- {{equipment.name}} -</a></small>
+        {% endfor %}
+        </p>
+                
+              </div>
+          </li>
+    
+          {%for muscle in post.muscles%}
+  <div class="modal fade" id="{{muscle.name}}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{muscle.name}}ModalLabel">{{muscle.name}} - {{muscle.body_part}} </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <img class="img img-fluid" src="/static/muscles/{{muscle.name}}.jpg" alt="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
-      {%endfor%}
-            {% endfor %}
-            </p>
-                    
-                  </div>
-              </li>
-        
-              {% endfor %}
+    </div>
+  </div>
+  {%endfor%}
+
+  {%for equipment in post.equipment %}
+  <div class="modal fade" id="{{equipment.name}}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{equipment.name}}ModalLabel">{{equipment.name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <img class="img img-fluid" src="/static/equipment/{{equipment.name}}.jpg" alt="" >
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+          {% endfor %}
+            
+    
           
     
               

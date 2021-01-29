@@ -68,6 +68,7 @@ class User(db.Model):
 
     @classmethod
     def change_info(cls, user_id, username, password):
+        """method to update username and password after google auth sets temp versions"""
         user = cls.query.get(user_id)
 
         new_password = bcrypt.generate_password_hash(password).decode('UTF-8')
@@ -125,6 +126,7 @@ class Likes(db.Model):
 
 
 class Muscle(db.Model):
+    """basic muscle model"""
     __tablename__ = 'muscles'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, unique=True, nullable=False)
@@ -143,6 +145,7 @@ class Muscle(db.Model):
 
 
 class Equipment(db.Model):
+    """basic model for piece of workout equipment"""
     __tablename__ = 'equipment'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, unique=True, nullable=False)
@@ -159,6 +162,8 @@ class Equipment(db.Model):
 
 
 class PostMuscle(db.Model):
+    """linking workout posts to the muscles used"""
+
     __tablename__ = 'posts_muscles'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -169,6 +174,7 @@ class PostMuscle(db.Model):
 
 
 class PostEquipment(db.Model):
+    """linking workout posts to equipment used"""
     __tablename__ = 'posts_equipment'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
