@@ -176,6 +176,7 @@ def register_new_user():
             return render_template('home_anon.html', register_form=register_form, login_form=login_form)
 
     else:
+        flash('Error creating account, please try again', 'danger')
         return render_template('home_anon.html', register_form=register_form, login_form=login_form)
 
 
