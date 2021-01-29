@@ -405,6 +405,25 @@ def edit_post(post_id):
         return render_template('edit_post.html', form=form, post=post, user=user)
 
 
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    if CURRENT_USER_KEY not in session:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    post = Post.query.get_or_404(post_id)
+    user = User.query.get(session[CURRENT_USER_KEY])
+
+    if post.user_id != session[CURRENT_USER_KEY]:
+        raise Unauthorized
+
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post Deleted!')
+
+    return redirect('/')
+
+
 @app.route('/privacy')
 def show_privacy_policy():
     return render_template('privacy_policy.html')
