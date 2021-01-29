@@ -403,3 +403,8 @@ def edit_post(post_id):
         form.equipment.data = [e.id for e in post.equipment]
 
         return render_template('edit_post.html', form=form, post=post, user=user)
+
+
+@app.route('/privacy')
+def show_privacy_policy():
+    return render_template('privacy_policy.html')
