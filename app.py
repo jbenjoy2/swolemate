@@ -358,7 +358,7 @@ def show_likes(user_id):
     else:
         like_active = ''
 
-    return render_template('likes.html', user=user, profuser=profuser, likes=user.likes, like_active=like_active)
+    return render_template('likes.html', user=user, profuser=profuser, likes=profuser.likes, like_active=like_active)
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
