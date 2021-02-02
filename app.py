@@ -307,6 +307,8 @@ def create_post(user_id):
                     is_private=form.is_private.data, user_id=user_id)
         db.session.add(post)
         db.session.commit()
+
+        # create join table additions
         muscles_to_add = []
         equipment_to_add = []
         for muscle in muscles:
@@ -325,9 +327,10 @@ def create_post(user_id):
 
 @app.route('/posts/<int:post_id>')
 def show_post(post_id):
+    """show full details of post"""
     if CURRENT_USER_KEY not in session:
-        flash("Access unauthorized.", "danger")
-        return redirect('/')
+        raise Unauthorized()
+
     post = Post.query.get_or_404(post_id)
     user = User.query.get(session[CURRENT_USER_KEY])
     return render_template('show_post.html', post=post, user=user)
@@ -335,9 +338,9 @@ def show_post(post_id):
 
 @app.route('/posts/<int:post_id>/like', methods=['POST'])
 def toggle_like(post_id):
+    """Adds a post to a users favorites"""
     if CURRENT_USER_KEY not in session:
-        flash("Access unauthorized.", "danger")
-        return redirect('/')
+        raise Unauthorized()
 
     liked_post = Post.query.get_or_404(post_id)
     user = User.query.get(session[CURRENT_USER_KEY])
@@ -358,10 +361,11 @@ def show_likes(user_id):
     """show all of the user's liked warbles"""
 
     if CURRENT_USER_KEY not in session:
-        flash('Access unauthorized.', 'danger')
-        return redirect('/')
+        raise Unauthorized()
 
+    # define user whose favorites are being viewed
     profuser = User.query.get_or_404(user_id)
+    # define logged-in user for navbar details
     user = User.query.get(session[CURRENT_USER_KEY])
     if session[CURRENT_USER_KEY] == user_id:
         like_active = 'active'
@@ -373,15 +377,16 @@ def show_likes(user_id):
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
 def edit_post(post_id):
+    """edit a user post with option to delete"""
     if CURRENT_USER_KEY not in session:
-        flash('Access unauthorized.', 'danger')
-        return redirect('/')
+        raise Unauthorized()
 
     post = Post.query.get_or_404(post_id)
     user = User.query.get(session[CURRENT_USER_KEY])
 
+    # prevent editing of post by anyone except for post owner
     if post.user_id != session[CURRENT_USER_KEY]:
-        raise Unauthorized
+        raise Unauthorized()
 
     form = PostForm(obj=post)
     muscles = form.muscles
@@ -398,6 +403,7 @@ def edit_post(post_id):
         equipment = form.equipment.data
         db.session.add(post)
         db.session.commit()
+        # create join table additions
         muscles_to_add = []
         equipment_to_add = []
         for muscle in muscles:
@@ -420,21 +426,24 @@ def edit_post(post_id):
 
 @app.route('/posts/<int:post_id>/delete', methods=['POST'])
 def delete_post(post_id):
+    """handle deletion of post"""
+
     if CURRENT_USER_KEY not in session:
-        flash('Access unauthorized.', 'danger')
-        return redirect('/')
+        raise Unauthorized()
 
     post = Post.query.get_or_404(post_id)
     user = User.query.get(session[CURRENT_USER_KEY])
 
     if post.user_id != session[CURRENT_USER_KEY]:
-        raise Unauthorized
+        raise Unauthorized()
 
     db.session.delete(post)
     db.session.commit()
     flash('Post Deleted!')
 
     return redirect('/')
+
+# ----PRIVACY POLICY FOR GOOGLE API-------
 
 
 @app.route('/privacy')
