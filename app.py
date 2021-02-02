@@ -37,7 +37,7 @@ google = oauth.register(
 )
 
 
-# main login/logout functionality
+# ------main login/logout functionality and helpers-----------------
 
 
 def do_login(user):
@@ -50,10 +50,10 @@ def do_logout():
     del session[CURRENT_USER_KEY]
 
 
-# custom 404 and 401
+# -------custom 404 and 401---------------------
 @app.errorhandler(404)
 def page_not_found(e):
-    # note that we set the 404 status explicitly
+
     return render_template('404.html'), 404
 
 
@@ -61,7 +61,7 @@ def page_not_found(e):
 def show_401(e):
     return render_template('401.html'), 401
 
-# google oauth routes
+# -----------google oauth routes------------
 
 
 @app.route('/login')
@@ -108,10 +108,11 @@ def authorize():
 
 
 @app.route('/user/<int:user_id>/force-reset', methods=['GET', 'POST'])
-def force_reset_password(user_id):
+def force_reset(user_id):
+    """Since google will set temporary username and password, this will force a user to set that data for themselves"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
-        return redirect('/sign-in')
+        return redirect('/')
 
     user = User.query.get_or_404(user_id)
     form = ForcedResetForm()
@@ -127,17 +128,16 @@ def force_reset_password(user_id):
 
 # main user routes outside of google oauth
 
-# api routes
-@app.route('/api/users/<int:user_id>')
-def get_user_info(user_id):
-    user = User.query.get(user_id)
-
-    return jsonify(user=user.serialize())
-
+# api route
 
 @app.route('/api/posts')
 def show_posts():
+    """This route is meant to serialize the posts on a given page so that the "load more" functionality works as expected on home page"""
+
+    # set page as req.args['page'] coerced to int, or set as one if none is passed
     page = int(request.args.get('page', 1))
+
+    # handle private AND public posts if user is logged in, only public if not
     if CURRENT_USER_KEY in session:
         posts = Post.query.order_by(Post.id.desc()).paginate(
             page=page, per_page=10, error_out=True)
@@ -149,8 +149,11 @@ def show_posts():
     return jsonify(has_next=posts.has_next, posts=all_posts)
 
 
+# ------User routes-------
+
 @ app.route('/register', methods=['POST'])
 def register_new_user():
+    """handle registration of new user"""
     register_form = UserAddForm()
     login_form = LoginForm()
 
@@ -170,49 +173,17 @@ def register_new_user():
             do_login(user)
             return redirect('/')
         except IntegrityError:
-            flash("Email already registered! Please log in or try again", 'danger')
+            flash(
+                "Email or username already registered! Please log in or try again", 'danger')
             return render_template('home_anon.html', register_form=register_form, login_form=login_form)
 
     else:
-        flash('Error creating account, please try again', 'danger')
         return render_template('home_anon.html', register_form=register_form, login_form=login_form)
-
-
-@ app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
-def edit_user_profile(user_id):
-    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
-        do_logout()
-        return redirect('/')
-
-    user = User.query.get_or_404(user_id)
-
-    form = UserEditForm(obj=user)
-
-    if form.validate_on_submit():
-        try:
-            user.email = form.email.data
-            user.username = form.username.data
-            user.first_name = form.first_name.data.capitalize()
-            user.last_name = form.last_name.data.capitalize()
-            user.image_url = form.image_url.data or User.image_url.default.arg
-            user.cover_url = form.cover_url.data or User.cover_url.default.arg
-            user.bio = form.bio.data
-
-            db.session.commit()
-        except IntegrityError:
-            db.session.rollback()
-            flash(
-                "Email or Username already taken!! Please try again", 'danger')
-            return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
-
-        flash('Profile Successfully Updated!', 'success')
-        return redirect(url_for('show_user_profile', user_id=user.id))
-    return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
 
 
 @ app.route('/', methods=['GET', 'POST'])
 def show_home_page():
-    """route to show main welcome page...may delete or alter later"""
+    """route to show main welcome page...varies depending on whether or not user is logged in"""
 
     login_form = LoginForm()
     # create register form instance to go in modal
@@ -249,6 +220,58 @@ def show_home_page():
     return render_template('home_anon.html', login_form=login_form, register_form=register_form, img_cls='hidden')
 
 
+@ app.route('/user/<int:user_id>')
+def show_user_profile(user_id):
+    """show user detail page"""
+
+    # raise 401 if no one logged in
+    if CURRENT_USER_KEY not in session:
+        raise Unauthorized()
+
+    # define user of whose profile is being viewed
+    profuser = User.query.get_or_404(user_id)
+    # define logged in user for authenticated navbar details
+    user = User.query.get(session[CURRENT_USER_KEY])
+    if user_id == session[CURRENT_USER_KEY]:
+        profile_active = 'active'
+    else:
+        profile_active = ''
+
+    return render_template('user_profile.html', profuser=profuser, user=user, profile_active=profile_active)
+
+
+@ app.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+def edit_user_profile(user_id):
+    """Show page to edit user profile"""
+    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+        raise Unauthorized()
+
+    user = User.query.get_or_404(user_id)
+
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        try:
+            user.email = form.email.data
+            user.username = form.username.data
+            user.first_name = form.first_name.data.capitalize()
+            user.last_name = form.last_name.data.capitalize()
+            user.image_url = form.image_url.data or User.image_url.default.arg
+            user.cover_url = form.cover_url.data or User.cover_url.default.arg
+            user.bio = form.bio.data
+
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash(
+                "Email or Username already taken!! Please try again", 'danger')
+            return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
+
+        flash('Profile Successfully Updated!', 'success')
+        return redirect(url_for('show_user_profile', user_id=user.id))
+    return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
+
+
 @ app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
 def logout(user_id):
     """route to log user out of app"""
@@ -258,28 +281,15 @@ def logout(user_id):
     return redirect('/')
 
 
-@ app.route('/user/<int:user_id>')
-def show_user_profile(user_id):
-    if CURRENT_USER_KEY not in session:
-        raise Unauthorized
-    profuser = User.query.get_or_404(user_id)
-
-    user = User.query.get(session[CURRENT_USER_KEY])
-    if user_id == session[CURRENT_USER_KEY]:
-        profile_active = 'active'
-    else:
-        profile_active = ''
-
-    return render_template('user_profile.html', profuser=profuser, user=user, profile_active=profile_active)
-
-# route for posting workouts
+# ----Post routes (Post as in a new post, not http verb "POST")-------
 
 
 @ app.route('/user/<int:user_id>/posts/new', methods=['GET', 'POST'])
 def create_post(user_id):
+    """Route to create new post"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
         do_logout()
-        return redirect('/sign-in')
+        return redirect('/')
 
     user = User.query.get_or_404(user_id)
 
