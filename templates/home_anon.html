@@ -68,7 +68,7 @@
           </div>
           <div class="modal-body text-center">
             <form method="POST" id="user_form" class="text-center">
-              {{ login_form.csrf_token(id='new_csrf')}}
+              {{ login_form.hidden_tag()}}
               <img class="mb-4" src="static/logo2.png" alt="" width="150" height="150">
               <h2 class="join-message">Welcome Back!</h2>
               {% for field in login_form if field.widget.input_type != 'hidden' %}

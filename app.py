@@ -272,7 +272,7 @@ def edit_user_profile(user_id):
     return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
 
 
-@ app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
+@ app.route('/user/<int:user_id>/logout', methods=['POST'])
 def logout(user_id):
     """route to log user out of app"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
@@ -318,7 +318,7 @@ def create_post(user_id):
             equipment_post = PostEquipment(
                 post_id=post.id, equipment_id=choice)
             equipment_to_add.append(equipment_post)
-        db.session.add_all(muscles_to_add+equipment_to_add)
+        db.session.add_all(muscles_to_add + equipment_to_add)
         db.session.commit()
         flash('New post created!', 'success')
         return redirect(url_for('show_user_profile', user_id=user_id))
@@ -413,7 +413,7 @@ def edit_post(post_id):
             equipment_post = PostEquipment(
                 post_id=post.id, equipment_id=choice)
             equipment_to_add.append(equipment_post)
-        db.session.add_all(muscles_to_add+equipment_to_add)
+        db.session.add_all(muscles_to_add + equipment_to_add)
         db.session.commit()
 
         return redirect(f'/posts/{post_id}')

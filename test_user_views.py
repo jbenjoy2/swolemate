@@ -47,6 +47,7 @@ class UserViewTestCase(TestCase):
             data = {
                 "new_email": 'test2@test.com',
                 "new_password": 'testpass',
+                "confirm": 'testpass',
                 "new_username": 'testuser2',
                 "first_name": 'test',
                 "last_name": 'user2',
@@ -54,10 +55,36 @@ class UserViewTestCase(TestCase):
                 "cover_url": None
             }
             resp = c.post('/register', data=data)
-            print(resp.status_code)
             self.assertEqual(resp.status_code, 302)
             user = User.query.filter_by(username='testuser2').first()
-            self.assertEqual(user.last_name, 'user2')
+            self.assertEqual(user.last_name, 'User2')
+
+    def test_login_user(self):
+        with self.client as c:
+            data = {"email": "test@test.com", "password": 'testpass'}
+            resp = c.post('/', data=data)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<div class="card user-card mb-3">', html)
+
+    def test_anon_homepage(self):
+        with self.client as c:
+            resp = c.get('/')
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                'Swolemate is a way for people to both share their own workouts', html)
+
+    def test_auth_homepage(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURRENT_USER_KEY] = self.testuser_id
+
+            resp = c.get('/')
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                '<div class="card user-card mb-3">', html)
 
     def test_show_user(self):
         with self.client as c:
@@ -80,3 +107,78 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 401)
             self.assertIn(
                 '<p class="pt-5">You do not have permission to view this page </p>', html)
+
+    def test_show_user_edit(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURRENT_USER_KEY] = self.testuser_id
+            user = User.query.get(self.testuser_id)
+            resp = c.get(f"/user/{self.testuser_id}/edit",
+                         follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                '<a href="/" class="btn btn-lg btn-danger col-5 form-control">Cancel</a>', html)
+
+    def test_show_user_edit_no_authentication(self):
+        with self.client as c:
+            resp = c.get(f"/user/{self.testuser_id}", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn(
+                '<p class="pt-5">You do not have permission to view this page </p>', html)
+
+    def test_show_user_edit_unauthorized(self):
+        u2 = User.signup(email='test2@test.com', password='testpass', username="testuser2",
+                         first_name='Test', last_name='User2', image_url=None, cover_url=None)
+        u2.id = 5678
+        db.session.commit()
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURRENT_USER_KEY] = u2.id
+
+            resp = c.get(f"/user/{self.testuser_id}/edit",
+                         follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn(
+                '<p class="pt-5">You do not have permission to view this page </p>', html)
+
+    def test_user_logout(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURRENT_USER_KEY] = self.testuser_id
+
+            resp = c.post(
+                f'/user/{self.testuser_id}/logout', follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                'Swolemate is a way for people to both share their own workouts', resp.get_data(as_text=True))
+
+    def test_user_logout_unauthenticated(self):
+        with self.client as c:
+            resp = c.post(
+                f'/user/{self.testuser_id}/logout', follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn(
+                '<p class="pt-5">You do not have permission to view this page </p>', resp.get_data(as_text=True))
+
+    def test_user_logout_unauthorized(self):
+        u2 = User.signup(email='test2@test.com', password='testpass', username="testuser2",
+                         first_name='Test', last_name='User2', image_url=None, cover_url=None)
+
+        u2.id = 5678
+        db.session.commit()
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURRENT_USER_KEY] = u2.id
+            resp = c.post(
+                f'/user/{self.testuser_id}/logout', follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn(
+                '<p class="pt-5">You do not have permission to view this page </p>', resp.get_data(as_text=True))
