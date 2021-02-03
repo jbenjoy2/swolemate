@@ -28,15 +28,6 @@ class UserViewTestCase(TestCase):
 
         db.session.commit()
 
-        self.test_post_public = Post(title='public', details='Public Test Post', is_private=False,
-                                     timestamp=Post.timestamp.default.arg, user_id=self.testuser_id)
-
-        self.test_post_private = Post(title='private', details='Private Test Post',
-                                      is_private=True, timestamp=Post.timestamp.default.arg, user_id=self.testuser_id)
-
-        db.session.add_all([self.test_post_public, self.test_post_private])
-        db.session.commit()
-
     def tearDown(self):
         resp = super().tearDown()
         db.session.rollback()

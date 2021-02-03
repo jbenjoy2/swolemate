@@ -344,7 +344,6 @@ def toggle_like(post_id):
 
     liked_post = Post.query.get_or_404(post_id)
     user = User.query.get(session[CURRENT_USER_KEY])
-
     # toggle the like by removing from user likes
     if liked_post in user.likes:
         user.likes.remove(liked_post)
