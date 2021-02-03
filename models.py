@@ -36,6 +36,7 @@ class User(db.Model):
         return f"<User #{self.id}: {self.email} - {self.username}>"
 
     # signup/authenticate methods
+
     @classmethod
     def signup(cls, email, password, username, first_name, last_name, image_url, cover_url):
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
