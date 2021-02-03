@@ -288,15 +288,15 @@ def logout(user_id):
 def create_post(user_id):
     """Route to create new post"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
-        do_logout()
-        return redirect('/')
+        raise Unauthorized
 
     user = User.query.get_or_404(user_id)
 
     form = PostForm()
     form.muscles.choices = [(m.id, m.name) for m in Muscle.query.all()]
     form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
-
+    # import pdb
+    # pdb.set_trace()
     if form.validate_on_submit():
         title = form.title.data
         details = form.details.data

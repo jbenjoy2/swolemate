@@ -167,7 +167,7 @@ li.anon:hover {
 #posts.no-hover {
 	display: flex;
 	justify-content: space-between;
-	height: 47px;
+
 	margin-top: 3px;
 }
 
