@@ -272,7 +272,7 @@ def edit_user_profile(user_id):
     return render_template('edit_profile.html', form=form, user=user, img_src=user.image_url)
 
 
-@ app.route('/user/<int:user_id>/logout', methods=['POST'])
+@ app.route('/user/<int:user_id>/logout', methods=['GET', 'POST'])
 def logout(user_id):
     """route to log user out of app"""
     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
