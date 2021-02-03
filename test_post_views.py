@@ -21,9 +21,6 @@ class UserViewTestCase(TestCase):
 
         self.client = app.test_client()
 
-        self.testPost = Post(
-            title='testpost1', details='this is a test post', )
-
         self.testuser = User.signup(email='test@test.com', password="testpass",
                                     username='testuser1', first_name='Test', last_name='User', image_url=User.image_url.default.arg, cover_url=User.cover_url.default.arg)
         self.testuser_id = 1234
