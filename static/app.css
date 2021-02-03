@@ -311,10 +311,6 @@ nav + .container {
 	margin-top: 3px;
 }
 
-#posts.no-hover .post-heading .btn:not(#like) {
-	min-width: 105px;
-}
-
 #like {
 	position: absolute;
 	top: 60px;
