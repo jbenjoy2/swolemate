@@ -75,10 +75,12 @@
 
    ##### ```Favoriting/unfavoriting a Post```
    On a post details page, clicking the star icon will add that post to a user's favorites and will navigate a user to his or her favorites page. Clicking the star icon again on any favorited post will remove that post from a user's favorites and pull it from their favorites page at the same time. 
+
    ![favorite post](static/readMe/favorite.gif)
    
    ##### ```Deleting a Post```
    On a post edit form, a user can also choose to delete the post he or she is editing. If the "Delete" button is clicked, a modal is launched to confirm the choice. Once the post is deleted, it is removed from the database, and from the favorites list of any user who had favorited the post prior to deletion. 
+   
    ![favorite post](static/readMe/postDelete.gif)
 ___
 
