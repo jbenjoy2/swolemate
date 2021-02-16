@@ -3,9 +3,7 @@
 ---
 
 <p align="center">
-<img src="static/logo2.png" style="width: 10%" />
 <img src="static/logo.png" />
-<img src="static/logo2.png" style="width: 10%" />
 </p>
 
 ### PROJECT GOALS
