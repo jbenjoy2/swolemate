@@ -80,7 +80,7 @@
    
    ##### ```Deleting a Post```
    On a post edit form, a user can also choose to delete the post he or she is editing. If the "Delete" button is clicked, a modal is launched to confirm the choice. Once the post is deleted, it is removed from the database, and from the favorites list of any user who had favorited the post prior to deletion. 
-   
+
    ![favorite post](static/readMe/postDelete.gif)
 ___
 
@@ -152,7 +152,7 @@ A comprehensive test suite is included above in the tests folder. Tests are writ
     - select `test_*.py` from the dropdown.
     - From the VSCode side navigation bar, click the button that looks like a chemistry flask 
     
-        ![test](static/readMe/flaskTest.png)
+    ![test](static/readMe/flaskTest.png)
 
     - Hit the two sideways arrows to run all tests in the test suite. 
 2. From the command line
