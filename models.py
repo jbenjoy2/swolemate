@@ -175,6 +175,13 @@ class PostMuscle(db.Model):
     muscle_id = db.Column(db.Integer, db.ForeignKey(
         'muscles.id', ondelete='CASCADE'), nullable=False)
 
+    @classmethod
+    def remove(cls, muscle_id, post_id):
+        post_muscles = cls.query.filter_by(
+            muscle_id=muscle_id).filter_by(post_id=post_id).all()
+        for post_muscle in post_muscles:
+            db.session.delete(post_muscle)
+
 
 class PostEquipment(db.Model):
     """linking workout posts to equipment used"""
@@ -185,3 +192,10 @@ class PostEquipment(db.Model):
         'posts.id', ondelete='CASCADE'), nullable=False)
     equipment_id = db.Column(db.Integer, db.ForeignKey(
         'equipment.id', ondelete='CASCADE'), nullable=False)
+
+    @classmethod
+    def remove(cls, equipment_id, post_id):
+        post_equipments = cls.query.filter_by(
+            equipment_id=equipment_id).filter_by(post_id=post_id).all()
+        for post_equipment in post_equipments:
+            db.session.delete(post_equipment)

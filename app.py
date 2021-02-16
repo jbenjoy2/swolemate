@@ -388,9 +388,11 @@ def edit_post(post_id):
         raise Unauthorized()
 
     form = PostForm(obj=post)
-    muscles = form.muscles
-    equipment = form.equipment
 
+    filled_muscles = form.muscles.object_data
+    filled_equipment = form.equipment.object_data
+
+    print(filled_muscles, filled_equipment)
     form.muscles.choices = [(m.id, m.name) for m in Muscle.query.all()]
     form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
 
@@ -405,6 +407,16 @@ def edit_post(post_id):
         # create join table additions
         muscles_to_add = []
         equipment_to_add = []
+        # remove muscles and equipment from post if they were removed on edit
+        for filled_muscle in filled_muscles:
+            if filled_muscle.id not in muscles:
+                PostMuscle.remove(muscle_id=filled_muscle.id, post_id=post_id)
+                db.session.commit()
+        for filled_equipment_choice in filled_equipment:
+            if filled_equipment_choice.id not in equipment:
+                PostEquipment.remove(
+                    equipment_id=filled_equipment_choice.id, post_id=post_id)
+                db.session.commit()
         for muscle in muscles:
             muscle_post = PostMuscle(post_id=post.id, muscle_id=muscle)
             muscles_to_add.append(muscle_post)
@@ -412,7 +424,9 @@ def edit_post(post_id):
             equipment_post = PostEquipment(
                 post_id=post.id, equipment_id=choice)
             equipment_to_add.append(equipment_post)
-        db.session.add_all(muscles_to_add + equipment_to_add)
+        db.session.add_all(muscles_to_add)
+        db.session.commit()
+        db.session.add_all(equipment_to_add)
         db.session.commit()
 
         return redirect(f'/posts/{post_id}')
@@ -435,7 +449,6 @@ def delete_post(post_id):
 
     if post.user_id != session[CURRENT_USER_KEY]:
         raise Unauthorized()
-
     db.session.delete(post)
     db.session.commit()
     flash('Post Deleted!')
