@@ -152,7 +152,7 @@ A comprehensive test suite is included above in the tests folder. Tests are writ
     - select `test_*.py` from the dropdown.
     - From the VSCode side navigation bar, click the button that looks like a chemistry flask 
     
-    ![test](static/readMe/flaskTest.png)
+    ![test](static/readMe/flasktest.png)
 
     - Hit the two sideways arrows to run all tests in the test suite. 
 2. From the command line
