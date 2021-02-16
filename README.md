@@ -138,7 +138,7 @@ Once you have your clientID and secret key, create a file called `google_auth.py
       from authlib.integrations.flask_client import OAuth
 
       id = <your-client-id-here>
-      secret = <your-secret-key-here
+      secret = <your-secret-key-here>
    ```     
 ___
 ## Running Tests
