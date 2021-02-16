@@ -3,8 +3,8 @@
 {% block title%}Log In{% endblock %}
 
 {%block style%}center-body{%endblock%}
+{%block nav%}{% include 'anon_nav.html'%}{%endblock%}
 {% block content%}
-{% include 'anon_nav.html'%}
 <div class="container">
   <div class="jumbotron py-1" style="background:none">
     <h1 class="text-center">
@@ -26,34 +26,33 @@
   
   
     
-    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h5 class="modal-title text-center" id="confirmModalLabel">Join Swolemate today!</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <form method="POST" action='/register'id="new_user_form" class="text-center">
-              {{ register_form.hidden_tag() }}
-              <img class="mb-4" src="static/logo.png" alt="">
-              {% for field in register_form if field.widget.input_type != 'hidden' %}
-                
-                {{ field(placeholder=field.label.text, class="form-control my-3") }}
-                {% for error in field.errors %}
-                  <p class="text-danger" id="register-errors">{{ error }}</p>
-                {% endfor %}
-                
-              {% endfor %}
-        
-              <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
-            </form>
-          </div>
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 class="modal-title text-center" id="confirmModalLabel">Join Swolemate today!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <form method="POST" action='/register'id="new_user_form" class="text-center">
+            {{ register_form.hidden_tag() }}
+            <img class="mb-4" src="static/logo.png" alt="">
+            {% for field in register_form if field.widget.input_type != 'hidden' %}
               
+              {{ field(placeholder=field.label.text, class="form-control my-3") }}
+              {% for error in field.errors %}
+                <p class="text-danger" id="register-errors">{{ error }}</p>
+              {% endfor %}
+              
+            {% endfor %}
+      
+            <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
+          </form>
+        </div>
             
-          </div>
+          
         </div>
       </div>
     </div>
@@ -97,13 +96,9 @@
 
   
 
-</div>
 
-
-
-</div>
 <h1 class="text-info text-center">Recent User Posts</h1>
-<div class="container mb-3">
+<div class="container mb-3" id="main-post-area">
     
     <div class="row justify-content-center">
         <div class="col-sm-8" id='pub-posts'>
@@ -114,7 +109,6 @@
     </div>
     <div class="row justify-content-center pb-3 my-3">
         <button class="btn btn-lg btn-info" style="display: none;" id='loadMore'>Load More</button>
-        <button class="btn btn-lg btn-link" id='topBtn'>Back to Top</button>
     </div>
    
 

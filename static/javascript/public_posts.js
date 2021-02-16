@@ -5,10 +5,9 @@ $(function() {
 		let response = await axios.get(`/api/posts?page=${page}`);
 		let posts = response.data.posts;
 		if (response.data.has_next) {
-			$('#loadMore').show();
 			pageCounter++;
 		} else {
-			$('#loadMore').hide();
+			$('#loadMore').remove();
 		}
 		return posts;
 	}
@@ -55,22 +54,23 @@ $(function() {
 	}
 
 	$(function() {
-		$('#topBtn').fadeOut(0);
+		$('#loadMore').fadeOut(0);
 		addPosts();
 		$('#loadMore').on('click', function() {
 			addPosts();
 		});
 
-		$(window).scroll(function() {
-			if ($(this).scrollTop() > 300) {
-				$('#topBtn').fadeIn(300);
+		$('#pub-posts').scroll(function() {
+			if ($(this).scrollTop() > 10) {
+				$('#loadMore').fadeIn(300);
 			} else {
-				$('#topBtn').fadeOut(300);
+				$('#loadMore').fadeOut(300);
 			}
 		});
 
 		$('#topBtn').click(function() {
 			$('html, body').animate({ scrollTop: 0 }, 400);
+			$('#pub-posts').animate({ scrollTop: 0 }, 400);
 		});
 	});
 });

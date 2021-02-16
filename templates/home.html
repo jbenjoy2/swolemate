@@ -3,13 +3,14 @@
 {%block title%}Home{%endblock%}
 
 {%block style%}center-body{%endblock%}
+{%block nav%}{% include 'auth_nav.html' %}{%endblock%}
 {%block content%}
-{% include 'auth_nav.html' %}
-<div class="container my-3">
+
+<div class="container my-3 flashing">
     {% include 'flash.html'%}
 </div>
 
-<div class="container mb-3">
+<div class="container mb-3 content">
     
     <div class="row">
 
@@ -45,20 +46,20 @@
         <div class="col-lg-6 col-md-8 col-sm-12" id='auth-posts'>
             <hr class="to-hide">
             <h3 class="to-hide text-center">Posts</h3>
-            <ul class="list-group" id="posts">
-            </ul>
+            <div id="all-posts">
+              <ul class="list-group" id="posts">
+              </ul>
+            </div>
+            
         </div>
         
     </div>
     <div class="row justify-content-center pb-3 my-3">
-        <button class="btn btn-lg btn-info" style="display:none" id='loadMore'>Load More</button>
-        <button class="btn btn-lg btn-link text-danger" id='topBtn'>Back to Top</button>
+        <button class="btn btn-lg btn-info" id='loadMore'>Load More</button>
 
     </div>
-   
 
-   
-</div>
+
 
 
 
