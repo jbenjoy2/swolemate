@@ -1,5 +1,6 @@
 # Swolemate - Capstone Project by Jason Benjoya 
 ## Live demo: https://jb-swolemate.herokuapp.com/
+## demo email: test@test.com; password: testpass
 ---
 
 <p align="center">
