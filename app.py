@@ -392,7 +392,7 @@ def edit_post(post_id):
     filled_muscles = form.muscles.object_data
     filled_equipment = form.equipment.object_data
 
-    print(filled_muscles, filled_equipment)
+    
     form.muscles.choices = [(m.id, m.name) for m in Muscle.query.all()]
     form.equipment.choices = [(e.id, e.name) for e in Equipment.query.all()]
 
