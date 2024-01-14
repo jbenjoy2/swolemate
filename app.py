@@ -3,12 +3,12 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from authlib.integrations.flask_client import OAuth
 from models import db, connect_db, User, Post, Muscle, Equipment, Likes, PostMuscle, PostEquipment
 from forms import UserAddForm, UserEditForm, LoginForm, ForcedResetForm, PostForm
-from google_auth import id, secret
+# from google_auth import id, secret
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
 
 CLIENT_ID = id
-CLIENT_SECRET = secret
+# CLIENT_SECRET = secret
 CURRENT_USER_KEY = 'current_user'
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'itsasecretshhhh')
@@ -20,21 +20,21 @@ app.config['SQLALCHEMY_ECHO'] = False
 connect_db(app)
 
 # set up google oauth first
-oauth = OAuth(app)
+# oauth = OAuth(app)
 
-google = oauth.register(
-    name='google',
-    client_id=id,
-    client_secret=secret,
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
-    # This is only needed if using openId to fetch user info
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    client_kwargs={'scope': 'openid email profile'},
-)
+# google = oauth.register(
+#     name='google',
+#     client_id=id,
+#     client_secret=secret,
+#     access_token_url='https://accounts.google.com/o/oauth2/token',
+#     access_token_params=None,
+#     authorize_url='https://accounts.google.com/o/oauth2/auth',
+#     authorize_params=None,
+#     api_base_url='https://www.googleapis.com/oauth2/v1/',
+#     # This is only needed if using openId to fetch user info
+#     userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+#     client_kwargs={'scope': 'openid email profile'},
+# )
 
 
 # ------main login/logout functionality and helpers-----------------
@@ -64,66 +64,66 @@ def show_401(e):
 # -----------google oauth routes------------
 
 
-@app.route('/login')
-def login():
-    """google oauth login route. redirects to the google oauth authorize route"""
-    google = oauth.create_client('google')  # create the google oauth client
-    redirect_uri = url_for('authorize', _external=True)
-    return google.authorize_redirect(redirect_uri)
+# @app.route('/login')
+# def login():
+#     """google oauth login route. redirects to the google oauth authorize route"""
+#     google = oauth.create_client('google')  # create the google oauth client
+#     redirect_uri = url_for('authorize', _external=True)
+#     return google.authorize_redirect(redirect_uri)
 
 
-@app.route('/authorize')
-def authorize():
-    """google oauth authorize route handles google login and also adds user/compares with database and session"""
+# @app.route('/authorize')
+# def authorize():
+#     """google oauth authorize route handles google login and also adds user/compares with database and session"""
 
-    google = oauth.create_client('google')  # create the google oauth client
-    # Access token from google (needed to get user info)
-    token = google.authorize_access_token()
-    # userinfo contains stuff u specificed in the scrope
-    resp = google.get('userinfo')
-    user_info = resp.json()
-    email = user_info['email']
-    first_name = user_info['given_name'].capitalize()
-    last_name = user_info['family_name'].capitalize()
-    image_url = User.image_url.default.arg
-    if user_info['picture'] != '' and user_info['picture']:
-        image_url = user_info['picture']
-    user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
-    # Here you use the profile/user data that you got and query your database find/register the user
-    # and set ur own data in the session not the profile from google
+#     google = oauth.create_client('google')  # create the google oauth client
+#     # Access token from google (needed to get user info)
+#     token = google.authorize_access_token()
+#     # userinfo contains stuff u specificed in the scrope
+#     resp = google.get('userinfo')
+#     user_info = resp.json()
+#     email = user_info['email']
+#     first_name = user_info['given_name'].capitalize()
+#     last_name = user_info['family_name'].capitalize()
+#     image_url = User.image_url.default.arg
+#     if user_info['picture'] != '' and user_info['picture']:
+#         image_url = user_info['picture']
+#     user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
+#     # Here you use the profile/user data that you got and query your database find/register the user
+#     # and set ur own data in the session not the profile from google
 
-    # compare with database;
-    user = User.query.filter_by(email=email).first()
-    print(user)
+#     # compare with database;
+#     user = User.query.filter_by(email=email).first()
+#     print(user)
 
-    if not user:
-        user = User.signup(email=email, password='password1', username='temporary',
-                           first_name=first_name, last_name=last_name, image_url=image_url, cover_url=User.cover_url.default.arg)
-        db.session.commit()
-        do_login(user)
-        return redirect(f'/user/{user.id}/force-reset')
-    else:
-        do_login(user)
-        return redirect('/')
+#     if not user:
+#         user = User.signup(email=email, password='password1', username='temporary',
+#                            first_name=first_name, last_name=last_name, image_url=image_url, cover_url=User.cover_url.default.arg)
+#         db.session.commit()
+#         do_login(user)
+#         return redirect(f'/user/{user.id}/force-reset')
+#     else:
+#         do_login(user)
+#         return redirect('/')
 
 
-@app.route('/user/<int:user_id>/force-reset', methods=['GET', 'POST'])
-def force_reset(user_id):
-    """Since google will set temporary username and password, this will force a user to set that data for themselves"""
-    if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
-        do_logout()
-        return redirect('/')
+# @app.route('/user/<int:user_id>/force-reset', methods=['GET', 'POST'])
+# def force_reset(user_id):
+#     """Since google will set temporary username and password, this will force a user to set that data for themselves"""
+#     if CURRENT_USER_KEY not in session or session[CURRENT_USER_KEY] != user_id:
+#         do_logout()
+#         return redirect('/')
 
-    user = User.query.get_or_404(user_id)
-    form = ForcedResetForm()
+#     user = User.query.get_or_404(user_id)
+#     form = ForcedResetForm()
 
-    if form.validate_on_submit():
-        User.change_info(
-            user_id=user_id, username=form.username.data, password=form.password.data)
-        db.session.commit()
-        flash('User information successfully changed!', 'success')
-        return redirect('/')
-    return render_template('/forced_reset.html', form=form, user=user)
+#     if form.validate_on_submit():
+#         User.change_info(
+#             user_id=user_id, username=form.username.data, password=form.password.data)
+#         db.session.commit()
+#         flash('User information successfully changed!', 'success')
+#         return redirect('/')
+#     return render_template('/forced_reset.html', form=form, user=user)
 
 
 # main user routes outside of google oauth
