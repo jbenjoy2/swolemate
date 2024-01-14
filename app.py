@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
-from authlib.integrations.flask_client import OAuth
+# from authlib.integrations.flask_client import OAuth
 from models import db, connect_db, User, Post, Muscle, Equipment, Likes, PostMuscle, PostEquipment
 from forms import UserAddForm, UserEditForm, LoginForm, ForcedResetForm, PostForm
 # from google_auth import id, secret

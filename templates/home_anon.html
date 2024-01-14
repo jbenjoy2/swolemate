@@ -1,127 +1,131 @@
-{% extends 'base.html' %}
-
-{% block title%}Log In{% endblock %}
-
-{%block style%}center-body{%endblock%}
-{%block nav%}{% include 'anon_nav.html'%}{%endblock%}
-{% block content%}
+{% extends 'base.html' %} {% block title%}Log In{% endblock %} {%block
+style%}center-body{%endblock%} {%block nav%}{% include
+'anon_nav.html'%}{%endblock%} {% block content%}
 <div class="container">
-  <div class="jumbotron py-1" style="background:none">
-    <h1 class="text-center">
-      Welcome to
-    </h1>
-    <div class="row justify-content-center"> 
-      <img src="/static/logo.png" alt="" class="">
+  <div class="jumbotron py-1" style="background: none">
+    <h1 class="text-center">Welcome to</h1>
+    <div class="row justify-content-center">
+      <img src="/static/logo.png" alt="" class="" />
     </div>
-    <br>
+    <br />
     <div class="row justify-content-center">
       <p class="text-center col-8">
-        Swolemate is a way for people to both share their own workouts, and discover new ones to try! Feel free to browse some of the public posts below, or log in for full access!
+        Swolemate is a way for people to both share their own workouts, and
+        discover new ones to try! Feel free to browse some of the public posts
+        below, or log in for full access!
       </p>
     </div>
-   
-    
   </div>
 
-  
-  
-    
-  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="registerModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="confirmModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header text-center">
-          <h5 class="modal-title text-center" id="confirmModalLabel">Join Swolemate today!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <h5 class="modal-title text-center" id="confirmModalLabel">
+            Join Swolemate today!
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body text-center">
-          <form method="POST" action='/register'id="new_user_form" class="text-center">
+          <form
+            method="POST"
+            action="/register"
+            id="new_user_form"
+            class="text-center"
+          >
             {{ register_form.hidden_tag() }}
-            <img class="mb-4" src="static/logo.png" alt="">
-            {% for field in register_form if field.widget.input_type != 'hidden' %}
-              
-              {{ field(placeholder=field.label.text, class="form-control my-3") }}
-              {% for error in field.errors %}
-                <p class="text-danger" id="register-errors">{{ error }}</p>
-              {% endfor %}
-              
-            {% endfor %}
-      
-            <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
+            <img class="mb-4" src="static/logo.png" alt="" />
+            {% for field in register_form if field.widget.input_type != 'hidden'
+            %} {{ field(placeholder=field.label.text, class="form-control my-3")
+            }} {% for error in field.errors %}
+            <p class="text-danger" id="register-errors">{{ error }}</p>
+            {% endfor %} {% endfor %}
+
+            <button class="btn btn-primary btn-lg btn-block">
+              Sign me up!
+            </button>
           </form>
         </div>
-            
-          
-        </div>
       </div>
     </div>
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h5 class="modal-title text-center" id="confirmModalLabel">Log In</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+  </div>
+  <div
+    class="modal fade"
+    id="loginModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="confirmModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 class="modal-title text-center" id="confirmModalLabel">Log In</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <form method="POST" id="user_form" class="text-center">
+            {{ login_form.hidden_tag()}}
+            <img
+              class="mb-4"
+              src="static/logo2.png"
+              alt=""
+              width="150"
+              height="150"
+            />
+            <h2 class="join-message">Welcome Back!</h2>
+            {% for field in login_form if field.widget.input_type != 'hidden' %}
+            {{ field(placeholder=field.label.text, class="form-control my-3") }}
+            {% for error in field.errors %}
+            <p class="text-danger mb-2" id="login-errors">{{ error }}</p>
+            {% endfor %} {% endfor %}
+
+            <button class="btn btn-danger btn-lg px-5 my-2" id="get-swole">
+              Get Swole
             </button>
-          </div>
-          <div class="modal-body text-center">
-            <form method="POST" id="user_form" class="text-center">
-              {{ login_form.hidden_tag()}}
-              <img class="mb-4" src="static/logo2.png" alt="" width="150" height="150">
-              <h2 class="join-message">Welcome Back!</h2>
-              {% for field in login_form if field.widget.input_type != 'hidden' %}
-                {{ field(placeholder=field.label.text, class="form-control my-3") }}
-                {% for error in field.errors %}
-                  <p class="text-danger mb-2" id='login-errors'>{{ error }}</p>
-                {% endfor %}
-              {% endfor %}
-          
-              <button class="btn btn-danger btn-lg px-5 my-2" id='get-swole'>Get Swole</button>
-            </form>
-            <div class="row justify-content-center">
-              <a href="/login"class="btn btn-lg btn-secondary my-2 justify-self-center" id="google-signin">
-                <span id="g-logo"></span>
-                <span id="g-text">Sign In With Google</span>
-            </a>
-          </div>
-              
-            
-          </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 </div>
-
-
-  
-
 
 <h1 class="text-info text-center">Recent User Posts</h1>
 <div class="container mb-3" id="main-post-area">
-    
-    <div class="row justify-content-center">
-        <div class="col-sm-8" id='pub-posts'>
-            <ul class="list-group" id="anon-posts">
-            </ul>
-        </div>
-        
+  <div class="row justify-content-center">
+    <div class="col-sm-8" id="pub-posts">
+      <ul class="list-group" id="anon-posts"></ul>
     </div>
-    <div class="row justify-content-center pb-3 my-3">
-        <button class="btn btn-lg btn-info" style="display: none;" id='loadMore'>Load More</button>
-    </div>
-   
-
-   
+  </div>
+  <div class="row justify-content-center pb-3 my-3">
+    <button class="btn btn-lg btn-info" style="display: none" id="loadMore">
+      Load More
+    </button>
+  </div>
 </div>
-<div class="container my-3">
-    {% include 'flash.html'%}
-</div>
+<div class="container my-3">{% include 'flash.html'%}</div>
 
-{%endblock%}
-{%block scripts%}
+{%endblock%} {%block scripts%}
 <script src="/static/javascript/public_posts.js"></script>
 {% endblock %}
-
-    
-
