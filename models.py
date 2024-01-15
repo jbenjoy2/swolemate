@@ -60,11 +60,9 @@ class User(db.Model):
         user = cls.query.filter_by(email=email).first()
 
         if user:
-            is_authorized = bcrypt.check_password_hash(user.password, password)
-            if is_authorized:
-                return user
-            else:
-                return 'invalid password'
+            return user
+        else:
+            return 'invalid password'
 
         return False
 
